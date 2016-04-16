@@ -16,7 +16,6 @@ Objectives:
   - remove scan types
   - move media playback to bass.net or some other single file decoder
   - do I **need** pictures?
-  - Remove id3 tags
   - Have an 'online' toggle. When on, fetch pictures / ID tag data from online music service, cache this. Make the feature opt in
   - program a visualisation
   - do i need:

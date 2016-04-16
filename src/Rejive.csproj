@@ -179,7 +179,6 @@
     <Content Include="_Todo.txt" />
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="ReferenceAssemblies\taglib-sharp.dll" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

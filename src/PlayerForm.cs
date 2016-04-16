@@ -51,8 +51,8 @@ namespace Rejive
                 Session.Playlist = Session.Profile.Playlist;
                 Session.PlaylistChanged += LoadPlaylist;
 
-                Text = "µAmp";
-                Title.Text = "µAmp";
+                Text = "Rejive";
+                Title.Text = "Rejive";
 
                 _player = new MediaElementPlayer();
                 //_player = new MCIPlayer();
@@ -70,7 +70,7 @@ namespace Rejive
                 Session.Profile.OnPropertyChanged("BackColor");
 
                 _trackListView = new TypedObjectListView<Track>(lstPlaylist);
-                TrackListView.GetColumn(0).AspectGetter = delegate(Track t) { return string.Concat(t.Artist, " - ", t.TrackName); };
+                TrackListView.GetColumn(0).AspectGetter = delegate(Track t) { return t.TrackName; };
 
                 LoadPlaylist();
 
@@ -217,7 +217,7 @@ namespace Rejive
             //If the current item is null, go to the start of the list.
             if (Session.Playlist.CurrentItem == null && Session.Playlist.Count <= 0)
             {
-                Text = "µAmp";
+                Text = "Rejive";
                 Title.Text = Text;
                 return;
             }
@@ -244,7 +244,7 @@ namespace Rejive
             PlaylistCount.Text = string.Format("{0}/{1}", Session.Playlist.CurrentPosition + 1, Session.Playlist.Count);
 
             //Set the title
-            Text = string.Concat(string.IsNullOrEmpty(Session.Playlist.CurrentItem.Artist) ? "" : Session.Playlist.CurrentItem.Artist + " - ", Session.Playlist.CurrentItem.TrackName);
+            Text = Session.Playlist.CurrentItem.TrackName;
             ToolTipProvider.SetToolTip(Title, Text);
 
             Title.Text = Text;
