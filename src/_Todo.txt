@@ -1,0 +1,30 @@
+﻿A minimalist audio player: just what I need to listen to music, and nothing more.
+
+Objectives:
+ - Plays .mp3 and .flac files
+ - Portable, no instalation required
+ - Smallest .exe, and fewest dependancies possible
+ - Looks that don't embarrass
+
+ Todo:
+  - remove library features
+  - change hover behaviour to use a highlight colour instead of drawing a box
+  - remove navigatable track
+  - remove drag/drop/reorder in playlist
+  - have a couple of fore/background colours preset
+  - remove options form
+  - remove scan types
+  - move media playback to bass.net or some other single file decoder
+  - do I **need** pictures?
+  - Remove id3 tags
+  - Have an 'online' toggle. When on, fetch pictures / ID tag data from online music service, cache this. Make the feature opt in
+  - program a visualisation
+  - do i need:
+	- Random?
+	- Repeat?
+	- Shuffle?
+ - make the whole app a drop zone for dragging in files
+ - change XML serialisation of .profile to json, or a text file
+ - Remove objectlist dependancy?
+
+

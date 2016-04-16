@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Padgett")]
 [assembly: AssemblyProduct("Rejive")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("824eeb6c-5d6a-4c65-b4b6-c1e6fb49da27")]
+[assembly: Guid("8afd83e7-225a-4739-ab28-80ee6e2229ad")]
 
 // Version information for an assembly consists of the following four values:
 //
