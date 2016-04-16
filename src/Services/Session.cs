@@ -52,10 +52,10 @@ namespace Rejive
                 {
                     var track = new Track();
 
-                    if (scanMethod == ScanMethod.File)
+                    //if (scanMethod == ScanMethod.File)
                         track.ParseFromFileName(file);
-                    else
-                        track.ParseFromID3(file);
+                    //else
+                    //    track.ParseFromID3(file);
 
                     Playlist.Add(track);
                 }

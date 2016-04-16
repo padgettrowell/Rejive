@@ -1,18 +1,18 @@
 ﻿A minimalist audio player: just what I need to listen to music, and nothing more.
 
 Objectives:
- - Plays .mp3 and .flac files
- - Portable, no instalation required
- - Smallest .exe, and fewest dependancies possible
- - Looks that don't embarrass
+ - Play .mp3 and .flac files
+ - Be portable, no installer required
+ - Be the smallest executable possible, with the fewest (and smallest) dependancies possible
+ - Look reasonable
+
+ Assumes:
+ - User doesn't need a music 'manager' and can figure out how to drag and drop what they want to listen to into Rejive
 
  Todo:
-  - remove library features
   - change hover behaviour to use a highlight colour instead of drawing a box
   - remove navigatable track
-  - remove drag/drop/reorder in playlist
   - have a couple of fore/background colours preset
-  - remove options form
   - remove scan types
   - move media playback to bass.net or some other single file decoder
   - do I **need** pictures?
@@ -21,10 +21,8 @@ Objectives:
   - program a visualisation
   - do i need:
 	- Random?
-	- Repeat?
 	- Shuffle?
  - make the whole app a drop zone for dragging in files
  - change XML serialisation of .profile to json, or a text file
  - Remove objectlist dependancy?
-
 

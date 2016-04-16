@@ -14,11 +14,8 @@ namespace Rejive
             Application.ThreadException += Application_ThreadException;
             AppDomain.CurrentDomain.UnhandledException += AppDomain_UnhandledException;
             Session.Profile = ProfileService.LoadProfile();
-            Application.Run( new PlayerForm());
-       
-        }
-
-        private static PlayerForm _mainForm;
+            Application.Run(new PlayerForm());
+       }
 
 
         private static void AppDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)

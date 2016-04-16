@@ -12,7 +12,7 @@ namespace Rejive
     {
         public NavigatableCollection<Track> Playlist { get; set; }
 
-        private bool _repeat = false;
+
         private bool _random = false;
         private bool _alwaysOnTop = false;
         private string _rootFolder = string.Empty;
@@ -24,17 +24,25 @@ namespace Rejive
         private Keys _pauseKey;
         private Keys _previousKey;
         private Keys _nextKey;
-        private Keys _miniPlayerKey;
 
         private ScanMethod _scanMethod;
         private List<string> _allowableFileTypes;
 
-        private bool _isLibraryVisible;
 
         public Profile()
         {
             Playlist = new NavigatableCollection<Track>();
-            _allowableFileTypes = new List<string>(); 
+            _allowableFileTypes = new List<string>(new[] { ".flac", ".mp3", ".wav", ".wma" });
+   
+            //Shortcut keys
+            PauseKey = Keys.Space;
+            PreviousKey = Keys.Z;
+            NextKey = Keys.X;
+
+            //Theme
+            ForeColor = Color.FromArgb(255, 0, 255, 0);
+            BackColor = Color.Black;
+
         }
 
 
@@ -73,19 +81,6 @@ namespace Rejive
                 {
                     _alwaysOnTop = value;
                     OnPropertyChanged("AlwaysOnTop");
-                }
-            }
-        }
-
-        public bool Repeat
-        {
-            get { return _repeat; }
-            set
-            {
-                if (_repeat != value)
-                {
-                    _repeat = value;
-                    OnPropertyChanged("Repeat");
                 }
             }
         }
@@ -222,20 +217,6 @@ namespace Rejive
                 }
             }
         }
-
-        public Keys MiniPlayerKey
-        {
-            get { return _miniPlayerKey; }
-            set
-            {
-                if (_miniPlayerKey != value)
-                {
-                    _miniPlayerKey = value;
-                    OnPropertyChanged("MiniPlayerKey");
-                }
-            }
-        }
-
         
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -16,7 +16,6 @@ namespace Rejive
     {
         private int _trackCurrentPosition = 0;
         private bool _userChangingPosition;
-        private bool _isMiniPlayer;
         private IPlayer _player;
         private StickyWindow _stickyWindow;
         private TypedObjectListView<Track> _trackListView;
@@ -32,11 +31,6 @@ namespace Rejive
             SetStyle(ControlStyles.ResizeRedraw, true);
             InitializeComponent();
             _stickyWindow = new StickyWindow(this);
-            _stickyWindow.IsParent = true;
-            _stickyWindow.ChildLock = true;
-
-           
-
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -71,28 +65,14 @@ namespace Rejive
                 
                 lstPlaylist.CellToolTipShowing += Playlist_ToolTipShowing;
                 //Let the UI update itself based on the profile settings
-                Session.Profile.OnPropertyChanged("IsLibraryVisible");
-                Session.Profile.OnPropertyChanged("Repeat");
                 Session.Profile.OnPropertyChanged("Random");
                 Session.Profile.OnPropertyChanged("AlwaysOnTop");
                 Session.Profile.OnPropertyChanged("BackColor");
-
-                var dropSink = new SimpleDropSink();
-                dropSink.CanDropBetween = true;
-                dropSink.CanDropOnItem = false;
-                dropSink.AutoScroll = true;
-                dropSink.FeedbackColor = Session.Profile.ForeColor;
-                dropSink.ModelCanDrop += Playlist_ModelCanDrop;
-                dropSink.ModelDropped += Playlist_ModelDropped;
-                lstPlaylist.DropSink = dropSink;
 
                 _trackListView = new TypedObjectListView<Track>(lstPlaylist);
                 TrackListView.GetColumn(0).AspectGetter = delegate(Track t) { return string.Concat(t.Artist, " - ", t.TrackName); };
 
                 LoadPlaylist();
-
-                //var f = new TestForm();
-                //f.Show();
 
                 //Keyboard hooks
                 BindKeys();
@@ -117,14 +97,11 @@ namespace Rejive
             _keyboardHook.HookedKeys.Add(Session.Profile.PauseKey);
             _keyboardHook.HookedKeys.Add(Session.Profile.PreviousKey);
             _keyboardHook.HookedKeys.Add(Session.Profile.NextKey);
-            _keyboardHook.HookedKeys.Add(Session.Profile.MiniPlayerKey);
-
             _keyboardHook.KeyDown += KeyboardHook_KeyDown;
 
             ToolTipProvider.SetToolTip(cmdPrevious, string.Format("Previous (Hotkey: {0})", Session.Profile.PreviousKey));
             ToolTipProvider.SetToolTip(cmdNext, string.Format("Next (Hotkey: {0})", Session.Profile.NextKey));
             ToolTipProvider.SetToolTip(cmdPause, string.Format("Pause (Hotkey: {0})", Session.Profile.PauseKey));
-            ToolTipProvider.SetToolTip(cmdMiniPlayer, string.Format("Toggle mini player (Hotkey: {0})", Session.Profile.MiniPlayerKey));
         }
 
         private void Player_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -164,13 +141,6 @@ namespace Rejive
                 DoMoveNextAndPlay();
                 e.Handled = true;
             }
-            else if (e.KeyCode == Session.Profile.MiniPlayerKey)
-            {
-                _isMiniPlayer = !_isMiniPlayer;
-                SwitchModes(_isMiniPlayer);
-                e.Handled = true;
-            }
-
         }
 
         private void Playlist_ToolTipShowing(object sender, ToolTipShowingEventArgs e)
@@ -191,11 +161,6 @@ namespace Rejive
         {
             switch (e.PropertyName)
             {
-                case "Repeat":
-                    {
-                        cmdRepeat.Checked = Session.Profile.Repeat;
-                    }
-                    break;
                 case "Random":
                     {
                         cmdRandom.Checked = Session.Profile.Random;
@@ -330,21 +295,9 @@ namespace Rejive
             else
             {                                                           // We have current track, we're not moving randomly so move to the next item in the playlist.
                 var newIndex = Session.Playlist.CurrentPosition + 1;
-
-                //If we're at the end
-                if (newIndex > Session.Playlist.Count - 1)
-                {
-                    if (Session.Profile.Repeat)
-                    {
-                        Session.Playlist.MoveFirst();
-                        PlayCurrentItem();
-                    }
-                }
-                else
-                {
-                    Session.Playlist.MoveNext();
-                    PlayCurrentItem();
-                }
+                Session.Playlist.MoveNext();
+                PlayCurrentItem();
+              
             }
         }
 
@@ -398,11 +351,6 @@ namespace Rejive
         private void cmdNext_Click(object sender, EventArgs e)
         {
             DoMoveNextAndPlay();
-        }
-
-        private void cmdRepeat_Click(object sender, EventArgs e)
-        {
-            Session.Profile.Repeat = !Session.Profile.Repeat;
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -514,62 +462,7 @@ namespace Rejive
             Session.AddFilesToPlaylist((string[]) e.Data.GetData(DataFormats.FileDrop));
         }
 
-        /// <summary>
-        /// Handle tracks drag and dropped within the playlist, or from the library
-        /// </summary>
-        private void Playlist_ModelCanDrop(object sender, ModelDropEventArgs e)
-        {
-            e.Effect = DragDropEffects.Copy;
-        }
-
-        /// <summary>
-        /// Handle tracks drag and dropped within the playlist, or from the library
-        /// </summary>
-        private void Playlist_ModelDropped(object sender, ModelDropEventArgs e)
-        {
-            // Is the user moving an item in the current list?
-            if (e.SourceListView == lstPlaylist)
-            {
-                foreach (Track track in e.SourceModels)
-                {
-                    if (TrackListView.Objects.IndexOf(track) <= e.DropTargetIndex)
-                    {
-                        Session.Playlist.Remove(track);
-                        Session.Playlist.Insert(e.DropTargetIndex, track);
-                    }
-                    else
-                    {
-                        Session.Playlist.Remove(track);
-                        Session.Playlist.Insert(e.DropTargetIndex - 1, track);
-                    }
-                }
-            }
-            else    // Accept a drop from the library
-            {
-                if (e.TargetModel == null)
-                {
-                    foreach (Track track in e.SourceModels)
-                    {
-                        Session.Playlist.Add(track);
-                    }
-                }
-                else
-                {
-                    var target = e.TargetModel as Track;
-                    var indexOfTarget = Session.Playlist.IndexOf(target);
-
-                    foreach (Track track in e.SourceModels)
-                    {
-                        Session.Playlist.Insert(indexOfTarget, track);
-                        indexOfTarget++;
-                    }
-                }
-            }
-            LoadPlaylist();
-        }
-
-
-
+     
         private void PlayerForm_Paint(object sender, PaintEventArgs e)
         {
             var inner = new Rectangle(ClientRectangle.Location, ClientRectangle.Size);
@@ -586,11 +479,6 @@ namespace Rejive
                 ClientRectangle,
                 Session.Profile.BackColor,
                 ButtonBorderStyle.Solid);
-        }
-
-        public void ShowWindow()
-        {
-            PInvoke.ShowToFront(Handle);
         }
 
         protected override void WndProc(ref Message m)
@@ -627,27 +515,6 @@ namespace Rejive
         {
             _userChangingPosition = false;
             _player.SkipTo(TimeSpan.FromSeconds(PlaybackSlider.Value));
-        }
-
-        private void SwitchModes(bool isMiniPlayer)
-        {
-            if (isMiniPlayer)
-            {
-                Session.Profile.PlayerSize = Size;
-                this.Height = 30;
-            }
-            else
-            {
-                Size = Session.Profile.PlayerSize;
-                if (Size.Height < 300)
-                    this.Height = 300;
-            }
-        }
-
-        private void cmdMiniPlayer_Click(object sender, EventArgs e)
-        {
-            _isMiniPlayer = !_isMiniPlayer;
-            SwitchModes(_isMiniPlayer);
         }
 
         private void PlaybackSlider_Scroll(object sender, EventArgs e)

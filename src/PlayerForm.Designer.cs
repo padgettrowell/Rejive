@@ -48,7 +48,6 @@
             this.cmdRandom = new Rejive.CheckLabel();
             this.cmdShuffle = new Rejive.CheckLabel();
             this.cmdClose = new Rejive.CheckLabel();
-            this.cmdRepeat = new Rejive.CheckLabel();
             this.Art = new System.Windows.Forms.PictureBox();
             this.ToolTipProvider = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.lstPlaylist)).BeginInit();
@@ -114,8 +113,6 @@
             this.lstPlaylist.HideSelection = false;
             this.lstPlaylist.HighlightBackgroundColor = System.Drawing.Color.Empty;
             this.lstPlaylist.HighlightForegroundColor = System.Drawing.Color.Empty;
-            this.lstPlaylist.IsSimpleDragSource = true;
-            this.lstPlaylist.IsSimpleDropSink = true;
             this.lstPlaylist.Location = new System.Drawing.Point(3, 109);
             this.lstPlaylist.Name = "lstPlaylist";
             this.lstPlaylist.SelectColumnsOnRightClick = false;
@@ -142,6 +139,7 @@
             this.FormContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.FormContainer.Controls.Add(this.lstPlaylist);
             this.FormContainer.Controls.Add(this.VolumeSlider);
             this.FormContainer.Controls.Add(this.PlaybackSlider);
             this.FormContainer.Controls.Add(this.cmdMiniPlayer);
@@ -155,8 +153,6 @@
             this.FormContainer.Controls.Add(this.cmdRandom);
             this.FormContainer.Controls.Add(this.cmdShuffle);
             this.FormContainer.Controls.Add(this.cmdClose);
-            this.FormContainer.Controls.Add(this.cmdRepeat);
-            this.FormContainer.Controls.Add(this.lstPlaylist);
             this.FormContainer.Controls.Add(this.Title);
             this.FormContainer.Controls.Add(this.PlaylistCount);
             this.FormContainer.Controls.Add(this.Art);
@@ -234,7 +230,6 @@
             this.cmdMiniPlayer.Text = "_";
             this.cmdMiniPlayer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdMiniPlayer, "Toggle mini player");
-            this.cmdMiniPlayer.Click += new System.EventHandler(this.cmdMiniPlayer_Click);
             // 
             // cmdNext
             // 
@@ -381,22 +376,6 @@
             this.ToolTipProvider.SetToolTip(this.cmdClose, "Exit");
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
-            // cmdRepeat
-            // 
-            this.cmdRepeat.Alpha = 140;
-            this.cmdRepeat.Checked = false;
-            this.cmdRepeat.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cmdRepeat.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdRepeat.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.cmdRepeat.Location = new System.Drawing.Point(57, 87);
-            this.cmdRepeat.Name = "cmdRepeat";
-            this.cmdRepeat.Size = new System.Drawing.Size(48, 20);
-            this.cmdRepeat.TabIndex = 48;
-            this.cmdRepeat.Text = "Repeat";
-            this.cmdRepeat.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.ToolTipProvider.SetToolTip(this.cmdRepeat, "Start again from the first track when the last track completes");
-            this.cmdRepeat.Click += new System.EventHandler(this.cmdRepeat_Click);
-            // 
             // Art
             // 
             this.Art.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -447,7 +426,6 @@
         private BrightIdeasSoftware.FastObjectListView lstPlaylist;
         private BrightIdeasSoftware.OLVColumn ColumnTrack;
         private System.Windows.Forms.Panel FormContainer;
-        private CheckLabel cmdRepeat;
         private CheckLabel cmdClose;
         private CheckLabel cmdShuffle;
         private System.Windows.Forms.ToolTip ToolTipProvider;
