@@ -61,12 +61,9 @@ namespace Rejive
                 _player.Init(this);
                 _player.PlaybackComplete += Player_PlaybackComplete;
                 _player.PlaybackPositionChanged += Player_PlaybackPositionChanged;
-                
-                
+                 
                 lstPlaylist.CellToolTipShowing += Playlist_ToolTipShowing;
-                //Let the UI update itself based on the profile settings
             
-
                 _trackListView = new TypedObjectListView<Track>(lstPlaylist);
                 TrackListView.GetColumn(0).AspectGetter = delegate(Track t) { return t.TrackName; };
 
@@ -77,7 +74,6 @@ namespace Rejive
 
                 //Process any command line args
                 Session.AddFilesToPlaylist(Environment.GetCommandLineArgs());
-
             }
             catch (Exception ex)
             {
@@ -156,7 +152,6 @@ namespace Rejive
         {
             e.Text = ((Track)e.Item.RowObject).TrackPathName;
         }
-
 
         private void FormPlayer_Shown(object sender, EventArgs e)
         {
@@ -422,7 +417,6 @@ namespace Rejive
         {
             Session.AddFilesToPlaylist((string[]) e.Data.GetData(DataFormats.FileDrop));
         }
-
      
         private void PlayerForm_Paint(object sender, PaintEventArgs e)
         {
