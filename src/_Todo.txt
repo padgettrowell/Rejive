@@ -10,14 +10,13 @@ Objectives:
  - User doesn't need a music 'manager' and can figure out how to drag and drop what they want to listen to into Rejive
 
  Todo:
-  - change hover behaviour to use a highlight colour instead of drawing a box
   - remove navigatable track
-  - have a couple of fore/background colours preset
   - remove scan types
-  - move media playback to bass.net or some other single file decoder
+  - move media playback to bass.net or some other single file decoder??
   - do I **need** pictures?
   - Have an 'online' toggle. When on, fetch pictures / ID tag data from online music service, cache this. Make the feature opt in
   - program a visualisation
+  - Add audio bitrate info
   - do i need:
 	- Random?
 	- Shuffle?
