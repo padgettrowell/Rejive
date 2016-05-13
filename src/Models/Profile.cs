@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace Rejive
 {
@@ -11,7 +12,6 @@ namespace Rejive
     public class Profile : INotifyPropertyChanged
     {
         public NavigatableCollection<Track> Playlist { get; set; }
-
 
         private bool _random = false;
         private bool _alwaysOnTop = false;
@@ -40,17 +40,10 @@ namespace Rejive
 
         public int Theme { get; set; }
 
+        [XmlIgnore]
         public List<string> AllowableFileTypes
         {
             get { return _allowableFileTypes; }
-            set
-            {
-                if (_allowableFileTypes != value)
-                {
-                    _allowableFileTypes = value;
-                    OnPropertyChanged("AllowableFileTypes");
-                }
-            }
         }
 
         public ScanMethod ScanMethod
