@@ -44,19 +44,13 @@ namespace Rejive
 
         public static void AddFilesToPlaylist(string[] files)
         {
-            var scanMethod = Profile.ScanMethod;
 
             foreach (string file in files)
             {
                 if (File.Exists(file) && Profile.AllowableFileTypes.Contains(Path.GetExtension(file)))
                 {
                     var track = new Track();
-
-                    //if (scanMethod == ScanMethod.File)
-                        track.ParseFromFileName(file);
-                    //else
-                    //    track.ParseFromID3(file);
-
+                    track.ParseFromFileName(file);
                     Playlist.Add(track);
                 }
             }

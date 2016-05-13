@@ -13,6 +13,7 @@ Objectives:
   - remove navigatable track
   - remove scan types
   - move media playback to bass.net or some other single file decoder??
+  - compare resource usage of MCIPlayer and MediaElementPlayer
   - do I **need** pictures?
   - Have an 'online' toggle. When on, fetch pictures / ID tag data from online music service, cache this. Make the feature opt in
   - program a visualisation

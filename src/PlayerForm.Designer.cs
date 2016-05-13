@@ -43,14 +43,12 @@
             this.Theme0 = new System.Windows.Forms.Label();
             this.VolumeSlider = new Rejive.TrackBar();
             this.PlaybackSlider = new Rejive.TrackBar();
-            this.cmdMiniPlayer = new System.Windows.Forms.Label();
             this.cmdNext = new System.Windows.Forms.Label();
             this.cmdPrevious = new System.Windows.Forms.Label();
             this.cmdStop = new System.Windows.Forms.Label();
             this.cmdPause = new System.Windows.Forms.Label();
             this.cmdPlay = new System.Windows.Forms.Label();
             this.cmdAlwayOnTop = new System.Windows.Forms.Label();
-            this.cmdRandom = new System.Windows.Forms.Label();
             this.cmdShuffle = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Label();
             this.Art = new System.Windows.Forms.PictureBox();
@@ -152,7 +150,6 @@
             this.FormContainer.Controls.Add(this.lstPlaylist);
             this.FormContainer.Controls.Add(this.VolumeSlider);
             this.FormContainer.Controls.Add(this.PlaybackSlider);
-            this.FormContainer.Controls.Add(this.cmdMiniPlayer);
             this.FormContainer.Controls.Add(this.cmdNext);
             this.FormContainer.Controls.Add(this.cmdPrevious);
             this.FormContainer.Controls.Add(this.cmdStop);
@@ -160,7 +157,6 @@
             this.FormContainer.Controls.Add(this.cmdPause);
             this.FormContainer.Controls.Add(this.cmdPlay);
             this.FormContainer.Controls.Add(this.cmdAlwayOnTop);
-            this.FormContainer.Controls.Add(this.cmdRandom);
             this.FormContainer.Controls.Add(this.cmdShuffle);
             this.FormContainer.Controls.Add(this.cmdClose);
             this.FormContainer.Controls.Add(this.Title);
@@ -296,20 +292,6 @@
             this.PlaybackSlider.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PlaybackSlider_MouseDown);
             this.PlaybackSlider.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PlaybackSlider_MouseUp);
             // 
-            // cmdMiniPlayer
-            // 
-            this.cmdMiniPlayer.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cmdMiniPlayer.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdMiniPlayer.Location = new System.Drawing.Point(252, 3);
-            this.cmdMiniPlayer.Name = "cmdMiniPlayer";
-            this.cmdMiniPlayer.Size = new System.Drawing.Size(20, 20);
-            this.cmdMiniPlayer.TabIndex = 55;
-            this.cmdMiniPlayer.Text = "_";
-            this.cmdMiniPlayer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.ToolTipProvider.SetToolTip(this.cmdMiniPlayer, "Toggle mini player");
-            this.cmdMiniPlayer.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
-            this.cmdMiniPlayer.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
-            // 
             // cmdNext
             // 
             this.cmdNext.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -400,21 +382,6 @@
             this.cmdAlwayOnTop.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
             this.cmdAlwayOnTop.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
             // 
-            // cmdRandom
-            // 
-            this.cmdRandom.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.cmdRandom.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdRandom.Location = new System.Drawing.Point(105, 87);
-            this.cmdRandom.Name = "cmdRandom";
-            this.cmdRandom.Size = new System.Drawing.Size(48, 20);
-            this.cmdRandom.TabIndex = 51;
-            this.cmdRandom.Text = "Random";
-            this.cmdRandom.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.ToolTipProvider.SetToolTip(this.cmdRandom, "Selects the next track to play randomly");
-            this.cmdRandom.Click += new System.EventHandler(this.cmdRandom_Click);
-            this.cmdRandom.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
-            this.cmdRandom.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
-            // 
             // cmdShuffle
             // 
             this.cmdShuffle.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -494,9 +461,7 @@
         private System.Windows.Forms.Label cmdClose;
         private System.Windows.Forms.Label cmdShuffle;
         private System.Windows.Forms.ToolTip ToolTipProvider;
-        private System.Windows.Forms.Label cmdRandom;
         private System.Windows.Forms.Label cmdAlwayOnTop;
-        private System.Windows.Forms.Label cmdMiniPlayer;
         private TrackBar PlaybackSlider;
         private TrackBar VolumeSlider;
         private System.Windows.Forms.Label Theme0;

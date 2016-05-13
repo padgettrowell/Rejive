@@ -46,19 +46,5 @@ namespace Rejive
         [DllImport("user32.dll")]
         public static extern IntPtr GetActiveWindow();
 
-        /// <summary>
-        /// Method opens the default application associated with the extension of the file supplied.
-        /// </summary>
-        public static void Shell(string pathFileName)
-        {
-            try
-            {
-                Process.Start(pathFileName);
-            }
-            catch
-            {
-                MessageBox.Show(string.Format("Cannot open '{0}'", pathFileName), "Error opening location", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-        }
     }
 }

@@ -8,12 +8,9 @@ namespace Rejive
     [Serializable]
     public class Track
     {
-
         public string TrackName { get; set; }
         public string TrackPathName { get; set; }
-
         public Track() { }
-
         /// <summary>
         /// Parse the file supplied and create a new track from the information
         /// </summary>

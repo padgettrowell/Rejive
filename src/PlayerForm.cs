@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using DataFormats = System.Windows.Forms.DataFormats;
@@ -51,7 +49,6 @@ namespace Rejive
                     Size = Session.Profile.PlayerSize;
                 }
 
-                Session.Profile.PropertyChanged += Profile_PropertyChanged;
                 Session.Playlist = Session.Profile.Playlist;
                 Session.PlaylistChanged += LoadPlaylist;
 
@@ -70,9 +67,7 @@ namespace Rejive
                 
                 lstPlaylist.CellToolTipShowing += Playlist_ToolTipShowing;
                 //Let the UI update itself based on the profile settings
-                Session.Profile.OnPropertyChanged("Random");
-                Session.Profile.OnPropertyChanged("AlwaysOnTop");
-                Session.Profile.OnPropertyChanged("BackColor");
+            
 
                 _trackListView = new TypedObjectListView<Track>(lstPlaylist);
                 TrackListView.GetColumn(0).AspectGetter = delegate(Track t) { return t.TrackName; };
@@ -173,32 +168,6 @@ namespace Rejive
             }
         }
 
-        void Profile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case "Random":
-                    {
-                        //cmdRandom.Checked = Session.Profile.Random;
-                    }
-                    break;
-                case "AlwaysOnTop":
-                    {
-                        TopMost = Session.Profile.AlwaysOnTop;
-
-                        //cmdAlwayOnTop.Checked = Session.Profile.AlwaysOnTop;
-                    }
-                    break;
-                //case "ForeColor":
-                //case "BackColor":
-                //    {
-                //        ThemeSetter.SetTheme(this, Session.Profile.ForeColor, Session.Profile.BackColor);
-                //    }
-                //    break;
-            }
-        }
-
-
         private void LoadPlaylist()
         {
             lstPlaylist.SetObjects(Session.Playlist);
@@ -278,32 +247,9 @@ namespace Rejive
         private void DoMoveNextAndPlay()
         {
             if (_trackListView.SelectedObjects.Count == 0)               //No track is selected, play the first track.
-            {
-                if (Session.Profile.Random)
-                {
-                    var nextTrack = PlaylistShuffler.PickRandomTrack(Session.Playlist);
-
-                    if (nextTrack != null)
-                    {
-                        Session.Playlist.MoveTo(nextTrack);
-                        PlayCurrentItem();
-                    }
-                }
-                else
-                {
-                    Session.Playlist.MoveFirst();
-                    PlayCurrentItem();
-                }
-            }
-            else if (Session.Profile.Random)                             //We have a current track, if we're in 'random mode' move to the next random track.
-            {
-                var nextTrack = PlaylistShuffler.PickRandomTrack(Session.Playlist);
-
-                if (nextTrack != null)
-                {
-                    Session.Playlist.MoveTo(nextTrack);
-                    PlayCurrentItem();
-                }
+            {              
+                Session.Playlist.MoveFirst();
+                PlayCurrentItem();
             }
             else
             {                                                           // We have current track, we're not moving randomly so move to the next item in the playlist.
@@ -388,16 +334,20 @@ namespace Rejive
             LoadPlaylist();
         }
 
-        private void cmdRandom_Click(object sender, EventArgs e)
-        {
-            Session.Profile.Random = !Session.Profile.Random;
-        }
-
         private void cmdAlwayOnTop_Click(object sender, EventArgs e)
         {
-            Session.Profile.AlwaysOnTop = !Session.Profile.AlwaysOnTop;
-        }
+            TopMost = !TopMost;
 
+            if (TopMost)
+            {
+                cmdAlwayOnTop.ForeColor = _themes[Session.Profile.Theme].HighlightColor;
+            }
+            else
+            {
+                cmdAlwayOnTop.ForeColor = _themes[Session.Profile.Theme].ForeColor;
+            }
+
+        }
 
         private void lstPlaylist_KeyDown(object sender, KeyEventArgs e)
         {
@@ -581,12 +531,37 @@ namespace Rejive
 
         private void cmdLabel_MouseEnter(object sender, EventArgs e)
         {
-            ((Label)sender).ForeColor = _themes[Session.Profile.Theme].HighlightColor;
+            Label lbl = sender as Label;
+
+            if (lbl.Name.StartsWith("cmdAlwayOnTop"))
+            {
+                if (!TopMost)
+                {
+                    lbl.ForeColor = _themes[Session.Profile.Theme].HighlightColor;
+                }
+            }
+            else
+            {
+                lbl.ForeColor = _themes[Session.Profile.Theme].HighlightColor;
+            }
+            
         }
 
         private void cmdLabel_MouseLeave(object sender, EventArgs e)
         {
-            ((Label)sender).ForeColor = _themes[Session.Profile.Theme].ForeColor;
+            Label lbl = sender as Label;
+
+            if (lbl.Name.StartsWith("cmdAlwayOnTop"))
+            {
+                if (!TopMost)
+                {
+                    lbl.ForeColor = _themes[Session.Profile.Theme].ForeColor;
+                }
+            }
+            else
+            {
+                lbl.ForeColor = _themes[Session.Profile.Theme].ForeColor;
+            }
         }
     }
 }
