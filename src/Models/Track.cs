@@ -8,7 +8,6 @@ namespace Rejive
     [Serializable]
     public class Track : INotifyPropertyChanged
     {
-        private Guid _id;
         private string _trackName;
         private string _trackPathName;
 
@@ -20,7 +19,6 @@ namespace Rejive
         /// </summary>
         public void ParseFromFileName(string fromFilePathName)
         {
-            Id = Guid.NewGuid();
             TrackPathName = fromFilePathName.Replace('\\', '/');
             TrackName = Path.GetFileNameWithoutExtension(fromFilePathName);
         }
@@ -40,19 +38,6 @@ namespace Rejive
             return null;
         }
 
-
-        public Guid Id
-        {
-            get { return _id; }
-            set
-            {
-                if (_id != value)
-                {
-                    _id = value;
-                    OnPropertyChanged("Id");
-                }
-            }
-        }
 
         public string TrackName
         {
