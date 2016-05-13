@@ -54,9 +54,7 @@ namespace Rejive
 
                 Text = "Rejive";
                 Title.Text = "Rejive";
-
-               
-
+                
                 _player = new MediaElementPlayer();
                 //_player = new MCIPlayer();
 

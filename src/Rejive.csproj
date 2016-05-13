@@ -133,7 +133,6 @@
     <Compile Include="Helpers\GlobalKeyboardHook.cs" />
     <Compile Include="Helpers\PInvoke.cs" />
     <Compile Include="Helpers\StickyWindow.cs" />
-    <Compile Include="Models\ScanMethod.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="PlayerForm.cs">
       <SubType>Form</SubType>
