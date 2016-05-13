@@ -61,7 +61,7 @@ namespace Rejive
                 ControlPaint.DrawBorder(
                    e.Graphics,
                    inner,
-                   Session.Profile.ForeColor,
+                   ForeColor,
                    ButtonBorderStyle.Solid);
             }
            

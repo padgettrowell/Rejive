@@ -16,8 +16,6 @@ namespace Rejive
         private bool _random = false;
         private bool _alwaysOnTop = false;
         private string _rootFolder = string.Empty;
-        private Color _backColor = SystemColors.Control;
-        private Color _foreColor = SystemColors.ControlText;
         private Point _playerLocation;
         private Size _playerSize;
         
@@ -38,13 +36,9 @@ namespace Rejive
             PauseKey = Keys.Space;
             PreviousKey = Keys.Z;
             NextKey = Keys.X;
-
-            //Theme
-            ForeColor = Color.FromArgb(255, 0, 255, 0);
-            BackColor = Color.Black;
-
         }
 
+        public int Theme { get; set; }
 
         public List<string> AllowableFileTypes
         {
@@ -96,46 +90,6 @@ namespace Rejive
                     OnPropertyChanged("Random");
                 }
             }
-        }
-
-        [System.Xml.Serialization.XmlIgnore()]
-        public Color BackColor
-        {
-            get { return _backColor; }
-            set
-            {
-                if (_backColor != value)
-                {
-                    _backColor = value;
-                    OnPropertyChanged("BackColor");
-                }
-            }
-        }
-
-        [System.Xml.Serialization.XmlIgnore()]
-        public Color ForeColor
-        {
-            get { return _foreColor; }
-            set
-            {
-                if (_foreColor != value)
-                {
-                    _foreColor = value;
-                    OnPropertyChanged("ForeColor");
-                }
-            }
-        }
-
-        public int ForeColorArgb
-        {
-            get { return _foreColor.ToArgb(); }
-            set { ForeColor = Color.FromArgb(value); }
-        }
-
-        public int BackColorArgb
-        {
-            get { return _backColor.ToArgb(); }
-            set { BackColor = Color.FromArgb(value); }
         }
 
         public Point PlayerLocation

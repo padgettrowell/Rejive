@@ -14,6 +14,8 @@ namespace Rejive
 {
     public partial class PlayerForm : Form
     {
+
+        private Theme[] _themes;
         private int _trackCurrentPosition = 0;
         private bool _userChangingPosition;
         private IPlayer _player;
@@ -37,6 +39,9 @@ namespace Rejive
         {
             try
             {
+                InitThemes();
+                SetThemeToProfile();
+
                 if (Session.Profile.PlayerLocation != Point.Empty)
                 {
                     Location = Session.Profile.PlayerLocation;
@@ -53,6 +58,8 @@ namespace Rejive
 
                 Text = "Rejive";
                 Title.Text = "Rejive";
+
+               
 
                 _player = new MediaElementPlayer();
                 //_player = new MCIPlayer();
@@ -85,6 +92,25 @@ namespace Rejive
             {
                 MessageBox.Show(string.Format("Error loading player: \n\n{0}", ex), "Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+
+        private void InitThemes()
+        {
+            _themes = new[] {
+                new Theme() { ForeColor = Color.Lime, BackColor = Color.DarkSlateGray, HighlightColor = Color.LightCoral },
+                new Theme() { ForeColor = Color.DeepSkyBlue, BackColor = Color.DarkSlateGray, HighlightColor = Color.LightCoral },
+                new Theme() { ForeColor = Color.Firebrick, BackColor = Color.DarkSlateGray, HighlightColor = Color.LightCoral },
+                new Theme() { ForeColor = Color.DeepSkyBlue, BackColor = Color.GhostWhite, HighlightColor = Color.LightCoral },
+                new Theme() { ForeColor = Color.Lime, BackColor = Color.GhostWhite, HighlightColor = Color.LightCoral }
+            };
+
+            Theme0.BackColor = _themes[0].ForeColor;
+            Theme1.BackColor = _themes[1].ForeColor;
+            Theme2.BackColor = _themes[2].ForeColor;
+            Theme3.BackColor = _themes[3].ForeColor;
+            Theme4.BackColor = _themes[4].ForeColor;
+
         }
 
         public void OpenFiles(String[] files)
@@ -173,12 +199,12 @@ namespace Rejive
                         cmdAlwayOnTop.Checked = Session.Profile.AlwaysOnTop;
                     }
                     break;
-                case "ForeColor":
-                case "BackColor":
-                    {
-                        ThemeSetter.SetTheme(this, Session.Profile.ForeColor, Session.Profile.BackColor);
-                    }
-                    break;
+                //case "ForeColor":
+                //case "BackColor":
+                //    {
+                //        ThemeSetter.SetTheme(this, Session.Profile.ForeColor, Session.Profile.BackColor);
+                //    }
+                //    break;
             }
         }
 
@@ -471,13 +497,13 @@ namespace Rejive
             ControlPaint.DrawBorder(
                 e.Graphics,
                 inner,
-                Session.Profile.ForeColor,
+                ForeColor,
                 ButtonBorderStyle.Solid);
 
             ControlPaint.DrawBorder(
                 e.Graphics,
                 ClientRectangle,
-                Session.Profile.BackColor,
+                BackColor,
                 ButtonBorderStyle.Solid);
         }
 
@@ -530,5 +556,40 @@ namespace Rejive
             _player.Volume = (double)VolumeSlider.Value / 100;
         }
 
+        private void Theme0_Click(object sender, EventArgs e)
+        {
+            Session.Profile.Theme = 0;
+            SetThemeToProfile();
+
+        }
+
+        private void Theme1_Click(object sender, EventArgs e)
+        {
+            Session.Profile.Theme = 1;
+            SetThemeToProfile();
+        }
+
+        private void Theme2_Click(object sender, EventArgs e)
+        {
+            Session.Profile.Theme = 2;
+            SetThemeToProfile();
+        }
+
+        private void Theme3_Click(object sender, EventArgs e)
+        {
+            Session.Profile.Theme = 3;
+            SetThemeToProfile();
+        }
+
+        private void Theme4_Click(object sender, EventArgs e)
+        {
+            Session.Profile.Theme = 4;
+            SetThemeToProfile();
+        }
+
+        private void SetThemeToProfile()
+        {
+            ThemeSetter.SetTheme(this, _themes[Session.Profile.Theme].ForeColor, _themes[Session.Profile.Theme].BackColor);
+        }
     }
 }

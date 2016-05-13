@@ -36,6 +36,13 @@
             this.lstPlaylist = new BrightIdeasSoftware.FastObjectListView();
             this.ColumnTrack = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.FormContainer = new System.Windows.Forms.Panel();
+            this.Art = new System.Windows.Forms.PictureBox();
+            this.ToolTipProvider = new System.Windows.Forms.ToolTip(this.components);
+            this.Theme0 = new System.Windows.Forms.Label();
+            this.Theme1 = new System.Windows.Forms.Label();
+            this.Theme3 = new System.Windows.Forms.Label();
+            this.Theme2 = new System.Windows.Forms.Label();
+            this.Theme4 = new System.Windows.Forms.Label();
             this.VolumeSlider = new Rejive.TrackBar();
             this.PlaybackSlider = new Rejive.TrackBar();
             this.cmdMiniPlayer = new Rejive.CheckLabel();
@@ -48,8 +55,6 @@
             this.cmdRandom = new Rejive.CheckLabel();
             this.cmdShuffle = new Rejive.CheckLabel();
             this.cmdClose = new Rejive.CheckLabel();
-            this.Art = new System.Windows.Forms.PictureBox();
-            this.ToolTipProvider = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.lstPlaylist)).BeginInit();
             this.FormContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Art)).BeginInit();
@@ -139,6 +144,11 @@
             this.FormContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.FormContainer.Controls.Add(this.Theme4);
+            this.FormContainer.Controls.Add(this.Theme3);
+            this.FormContainer.Controls.Add(this.Theme2);
+            this.FormContainer.Controls.Add(this.Theme1);
+            this.FormContainer.Controls.Add(this.Theme0);
             this.FormContainer.Controls.Add(this.lstPlaylist);
             this.FormContainer.Controls.Add(this.VolumeSlider);
             this.FormContainer.Controls.Add(this.PlaybackSlider);
@@ -162,6 +172,86 @@
             this.FormContainer.TabIndex = 47;
             this.FormContainer.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form_DragDrop);
             this.FormContainer.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form_DragEnter);
+            // 
+            // Art
+            // 
+            this.Art.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Art.Location = new System.Drawing.Point(234, 32);
+            this.Art.Name = "Art";
+            this.Art.Size = new System.Drawing.Size(75, 75);
+            this.Art.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Art.TabIndex = 32;
+            this.Art.TabStop = false;
+            // 
+            // Theme0
+            // 
+            this.Theme0.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Theme0.BackColor = System.Drawing.Color.Black;
+            this.Theme0.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Theme0.Font = new System.Drawing.Font("Calibri", 8.25F);
+            this.Theme0.Location = new System.Drawing.Point(10, 91);
+            this.Theme0.Name = "Theme0";
+            this.Theme0.Size = new System.Drawing.Size(8, 8);
+            this.Theme0.TabIndex = 58;
+            this.Theme0.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTipProvider.SetToolTip(this.Theme0, "Current index over the number of tracks in the playlist");
+            this.Theme0.Click += new System.EventHandler(this.Theme0_Click);
+            // 
+            // Theme1
+            // 
+            this.Theme1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Theme1.BackColor = System.Drawing.Color.Black;
+            this.Theme1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Theme1.Font = new System.Drawing.Font("Calibri", 8.25F);
+            this.Theme1.Location = new System.Drawing.Point(21, 91);
+            this.Theme1.Name = "Theme1";
+            this.Theme1.Size = new System.Drawing.Size(8, 8);
+            this.Theme1.TabIndex = 59;
+            this.Theme1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTipProvider.SetToolTip(this.Theme1, "Current index over the number of tracks in the playlist");
+            this.Theme1.Click += new System.EventHandler(this.Theme1_Click);
+            // 
+            // Theme3
+            // 
+            this.Theme3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Theme3.BackColor = System.Drawing.Color.Black;
+            this.Theme3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Theme3.Font = new System.Drawing.Font("Calibri", 8.25F);
+            this.Theme3.Location = new System.Drawing.Point(44, 91);
+            this.Theme3.Name = "Theme3";
+            this.Theme3.Size = new System.Drawing.Size(8, 8);
+            this.Theme3.TabIndex = 61;
+            this.Theme3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTipProvider.SetToolTip(this.Theme3, "Current index over the number of tracks in the playlist");
+            this.Theme3.Click += new System.EventHandler(this.Theme3_Click);
+            // 
+            // Theme2
+            // 
+            this.Theme2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Theme2.BackColor = System.Drawing.Color.Black;
+            this.Theme2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Theme2.Font = new System.Drawing.Font("Calibri", 8.25F);
+            this.Theme2.Location = new System.Drawing.Point(33, 91);
+            this.Theme2.Name = "Theme2";
+            this.Theme2.Size = new System.Drawing.Size(8, 8);
+            this.Theme2.TabIndex = 60;
+            this.Theme2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTipProvider.SetToolTip(this.Theme2, "Current index over the number of tracks in the playlist");
+            this.Theme2.Click += new System.EventHandler(this.Theme2_Click);
+            // 
+            // Theme4
+            // 
+            this.Theme4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Theme4.BackColor = System.Drawing.Color.Black;
+            this.Theme4.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Theme4.Font = new System.Drawing.Font("Calibri", 8.25F);
+            this.Theme4.Location = new System.Drawing.Point(56, 91);
+            this.Theme4.Name = "Theme4";
+            this.Theme4.Size = new System.Drawing.Size(8, 8);
+            this.Theme4.TabIndex = 62;
+            this.Theme4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTipProvider.SetToolTip(this.Theme4, "Current index over the number of tracks in the playlist");
+            this.Theme4.Click += new System.EventHandler(this.Theme4_Click);
             // 
             // VolumeSlider
             // 
@@ -376,16 +466,6 @@
             this.ToolTipProvider.SetToolTip(this.cmdClose, "Exit");
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
-            // Art
-            // 
-            this.Art.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Art.Location = new System.Drawing.Point(234, 32);
-            this.Art.Name = "Art";
-            this.Art.Size = new System.Drawing.Size(75, 75);
-            this.Art.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.Art.TabIndex = 32;
-            this.Art.TabStop = false;
-            // 
             // PlayerForm
             // 
             this.AllowDrop = true;
@@ -434,6 +514,11 @@
         private CheckLabel cmdMiniPlayer;
         private TrackBar PlaybackSlider;
         private TrackBar VolumeSlider;
+        private System.Windows.Forms.Label Theme0;
+        private System.Windows.Forms.Label Theme4;
+        private System.Windows.Forms.Label Theme3;
+        private System.Windows.Forms.Label Theme2;
+        private System.Windows.Forms.Label Theme1;
     }
 }
 

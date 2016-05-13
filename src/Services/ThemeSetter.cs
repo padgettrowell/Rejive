@@ -29,12 +29,18 @@ namespace Rejive
                     slider.TrackLineColor = foreColor;
                 }
 
-                //if (ctrl is ObjectListView)
-                //{
-                //    ((ObjectListView)ctrl).SetColumnHeaderColors(foreColor, backColor);
-                //}
 
-                if (ctrl is Control)
+                if (ctrl is Label)
+                {
+                    var lable = ctrl as Label;
+                    if (!lable.Name.StartsWith("Theme"))
+                    {
+                        lable.ForeColor = foreColor;
+                        lable.BackColor = backColor;
+                    }
+                        
+                }
+                else if (ctrl is Control)
                 {
                     ((Control)ctrl).ForeColor = foreColor;
                     ((Control)ctrl).BackColor = backColor;
@@ -44,6 +50,12 @@ namespace Rejive
                         ApplyTheme(((Control)ctrl).Controls, foreColor, backColor);
                     }
                 }
+
+
+                //if (ctrl is ObjectListView)
+                //{
+                //    ((ObjectListView)ctrl).SetColumnHeaderColors(foreColor, backColor);
+                //}
             }
         }
     }
