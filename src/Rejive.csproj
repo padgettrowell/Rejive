@@ -90,10 +90,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FileAssociation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>ReferenceAssemblies\FileAssociation.dll</HintPath>
-    </Reference>
     <Reference Include="ObjectListView, Version=2.9.0.25611, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.Official.2.9.0\lib\net20\ObjectListView.dll</HintPath>
       <Private>True</Private>
@@ -120,7 +116,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="taglib-sharp, Version=2.0.3.6, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL" />
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -129,9 +124,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\CheckLabel.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Controls\ColorHelper.cs" />
     <Compile Include="Controls\TrackBarDrawStyleHelper.cs" />
     <Compile Include="Controls\TrackBar.cs">
@@ -157,9 +149,6 @@
     <Compile Include="Helpers\NavigatableCollection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Controls\CheckLabel.resx">
-      <DependentUpon>CheckLabel.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\TrackBar.resx">
       <DependentUpon>TrackBar.cs</DependentUpon>
     </EmbeddedResource>

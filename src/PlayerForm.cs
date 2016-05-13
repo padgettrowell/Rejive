@@ -14,7 +14,6 @@ namespace Rejive
 {
     public partial class PlayerForm : Form
     {
-
         private Theme[] _themes;
         private int _trackCurrentPosition = 0;
         private bool _userChangingPosition;
@@ -67,7 +66,6 @@ namespace Rejive
                 _player.Init(this);
                 _player.PlaybackComplete += Player_PlaybackComplete;
                 _player.PlaybackPositionChanged += Player_PlaybackPositionChanged;
-                _player.PropertyChanged += Player_PropertyChanged;
                 
                 
                 lstPlaylist.CellToolTipShowing += Playlist_ToolTipShowing;
@@ -98,11 +96,11 @@ namespace Rejive
         private void InitThemes()
         {
             _themes = new[] {
-                new Theme() { ForeColor = Color.Lime, BackColor = Color.DarkSlateGray, HighlightColor = Color.LightCoral },
-                new Theme() { ForeColor = Color.DeepSkyBlue, BackColor = Color.DarkSlateGray, HighlightColor = Color.LightCoral },
-                new Theme() { ForeColor = Color.Firebrick, BackColor = Color.DarkSlateGray, HighlightColor = Color.LightCoral },
-                new Theme() { ForeColor = Color.DeepSkyBlue, BackColor = Color.GhostWhite, HighlightColor = Color.LightCoral },
-                new Theme() { ForeColor = Color.Lime, BackColor = Color.GhostWhite, HighlightColor = Color.LightCoral }
+                new Theme() { ForeColor = Color.Lime, BackColor = Color.DarkSlateGray, HighlightColor = Color.DarkOrange},
+                new Theme() { ForeColor = Color.LightSkyBlue, BackColor = Color.DarkSlateGray, HighlightColor = Color.Yellow},
+                new Theme() { ForeColor = Color.DarkOrange, BackColor = Color.DarkSlateGray, HighlightColor = Color.Lime },
+                new Theme() { ForeColor = Color.DodgerBlue, BackColor = Color.GhostWhite, HighlightColor = Color.DarkOrange },
+                new Theme() { ForeColor = Color.DarkOrange, BackColor = Color.GhostWhite, HighlightColor = Color.DodgerBlue }
             };
 
             Theme0.BackColor = _themes[0].ForeColor;
@@ -128,14 +126,6 @@ namespace Rejive
             ToolTipProvider.SetToolTip(cmdPrevious, string.Format("Previous (Hotkey: {0})", Session.Profile.PreviousKey));
             ToolTipProvider.SetToolTip(cmdNext, string.Format("Next (Hotkey: {0})", Session.Profile.NextKey));
             ToolTipProvider.SetToolTip(cmdPause, string.Format("Pause (Hotkey: {0})", Session.Profile.PauseKey));
-        }
-
-        private void Player_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "IsPaused")
-            {
-                cmdPause.Checked = _player.IsPaused;
-            }
         }
 
         private void KeyboardHook_KeyDown(object sender, KeyEventArgs e)
@@ -189,14 +179,14 @@ namespace Rejive
             {
                 case "Random":
                     {
-                        cmdRandom.Checked = Session.Profile.Random;
+                        //cmdRandom.Checked = Session.Profile.Random;
                     }
                     break;
                 case "AlwaysOnTop":
                     {
                         TopMost = Session.Profile.AlwaysOnTop;
 
-                        cmdAlwayOnTop.Checked = Session.Profile.AlwaysOnTop;
+                        //cmdAlwayOnTop.Checked = Session.Profile.AlwaysOnTop;
                     }
                     break;
                 //case "ForeColor":
@@ -256,9 +246,6 @@ namespace Rejive
             //Load and play
             _player.Load(Session.Playlist.CurrentItem.TrackPathName);
             _player.Play();
-
-            //Uncheck the pause button
-            cmdPause.Checked = false;
 
             //Select the item in the playlist 
             TrackListView.SelectedObject = Session.Playlist.CurrentItem;
@@ -589,7 +576,17 @@ namespace Rejive
 
         private void SetThemeToProfile()
         {
-            ThemeSetter.SetTheme(this, _themes[Session.Profile.Theme].ForeColor, _themes[Session.Profile.Theme].BackColor);
+            ThemeSetter.SetTheme(this, _themes[Session.Profile.Theme]);
+        }
+
+        private void cmdLabel_MouseEnter(object sender, EventArgs e)
+        {
+            ((Label)sender).ForeColor = _themes[Session.Profile.Theme].HighlightColor;
+        }
+
+        private void cmdLabel_MouseLeave(object sender, EventArgs e)
+        {
+            ((Label)sender).ForeColor = _themes[Session.Profile.Theme].ForeColor;
         }
     }
 }

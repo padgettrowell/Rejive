@@ -1,19 +1,18 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
-using BrightIdeasSoftware;
 
 namespace Rejive
 {
     public static class ThemeSetter
     {
-        public static void SetTheme(Form form, Color foreColor, Color backColor)
+        public static void SetTheme(Form form, Theme theme)
         {
-            form.ForeColor = foreColor;
-            form.BackColor = backColor;
+
+            form.ForeColor = theme.ForeColor;
+            form.BackColor = theme.BackColor;
 
             //Recursivly apply the theme to all controls on this form
-            ApplyTheme(form.Controls, foreColor, backColor);
+            ApplyTheme(form.Controls, theme.ForeColor, theme.BackColor);
         }
 
         private static void ApplyTheme(Control.ControlCollection ctrls, Color foreColor, Color backColor)
@@ -28,17 +27,15 @@ namespace Rejive
                     slider.TrackerColor = foreColor;
                     slider.TrackLineColor = foreColor;
                 }
-
-
-                if (ctrl is Label)
+                else if (ctrl is Label)
                 {
-                    var lable = ctrl as Label;
-                    if (!lable.Name.StartsWith("Theme"))
+                    var label = ctrl as Label;
+                    if (!label.Name.StartsWith("Theme"))
                     {
-                        lable.ForeColor = foreColor;
-                        lable.BackColor = backColor;
+                        label.ForeColor = foreColor;
+                        label.BackColor = backColor;
                     }
-                        
+
                 }
                 else if (ctrl is Control)
                 {
@@ -50,12 +47,6 @@ namespace Rejive
                         ApplyTheme(((Control)ctrl).Controls, foreColor, backColor);
                     }
                 }
-
-
-                //if (ctrl is ObjectListView)
-                //{
-                //    ((ObjectListView)ctrl).SetColumnHeaderColors(foreColor, backColor);
-                //}
             }
         }
     }

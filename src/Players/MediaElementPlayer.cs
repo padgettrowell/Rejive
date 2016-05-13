@@ -62,8 +62,8 @@ namespace Rejive
 
         public void Init(PlayerForm container)
         {
-            //Instantiate the player
-            _player = new MediaElement();
+             //Instantiate the player
+             _player = new MediaElement();
             _player.LoadedBehavior = MediaState.Manual;
             _player.Visibility = System.Windows.Visibility.Hidden;
            

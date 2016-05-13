@@ -36,25 +36,25 @@
             this.lstPlaylist = new BrightIdeasSoftware.FastObjectListView();
             this.ColumnTrack = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.FormContainer = new System.Windows.Forms.Panel();
-            this.Art = new System.Windows.Forms.PictureBox();
-            this.ToolTipProvider = new System.Windows.Forms.ToolTip(this.components);
-            this.Theme0 = new System.Windows.Forms.Label();
-            this.Theme1 = new System.Windows.Forms.Label();
+            this.Theme4 = new System.Windows.Forms.Label();
             this.Theme3 = new System.Windows.Forms.Label();
             this.Theme2 = new System.Windows.Forms.Label();
-            this.Theme4 = new System.Windows.Forms.Label();
+            this.Theme1 = new System.Windows.Forms.Label();
+            this.Theme0 = new System.Windows.Forms.Label();
             this.VolumeSlider = new Rejive.TrackBar();
             this.PlaybackSlider = new Rejive.TrackBar();
-            this.cmdMiniPlayer = new Rejive.CheckLabel();
-            this.cmdNext = new Rejive.CheckLabel();
-            this.cmdPrevious = new Rejive.CheckLabel();
-            this.cmdStop = new Rejive.CheckLabel();
-            this.cmdPause = new Rejive.CheckLabel();
-            this.cmdPlay = new Rejive.CheckLabel();
-            this.cmdAlwayOnTop = new Rejive.CheckLabel();
-            this.cmdRandom = new Rejive.CheckLabel();
-            this.cmdShuffle = new Rejive.CheckLabel();
-            this.cmdClose = new Rejive.CheckLabel();
+            this.cmdMiniPlayer = new System.Windows.Forms.Label();
+            this.cmdNext = new System.Windows.Forms.Label();
+            this.cmdPrevious = new System.Windows.Forms.Label();
+            this.cmdStop = new System.Windows.Forms.Label();
+            this.cmdPause = new System.Windows.Forms.Label();
+            this.cmdPlay = new System.Windows.Forms.Label();
+            this.cmdAlwayOnTop = new System.Windows.Forms.Label();
+            this.cmdRandom = new System.Windows.Forms.Label();
+            this.cmdShuffle = new System.Windows.Forms.Label();
+            this.cmdClose = new System.Windows.Forms.Label();
+            this.Art = new System.Windows.Forms.PictureBox();
+            this.ToolTipProvider = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.lstPlaylist)).BeginInit();
             this.FormContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Art)).BeginInit();
@@ -173,43 +173,19 @@
             this.FormContainer.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form_DragDrop);
             this.FormContainer.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form_DragEnter);
             // 
-            // Art
+            // Theme4
             // 
-            this.Art.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Art.Location = new System.Drawing.Point(234, 32);
-            this.Art.Name = "Art";
-            this.Art.Size = new System.Drawing.Size(75, 75);
-            this.Art.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.Art.TabIndex = 32;
-            this.Art.TabStop = false;
-            // 
-            // Theme0
-            // 
-            this.Theme0.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Theme0.BackColor = System.Drawing.Color.Black;
-            this.Theme0.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Theme0.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.Theme0.Location = new System.Drawing.Point(10, 91);
-            this.Theme0.Name = "Theme0";
-            this.Theme0.Size = new System.Drawing.Size(8, 8);
-            this.Theme0.TabIndex = 58;
-            this.Theme0.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ToolTipProvider.SetToolTip(this.Theme0, "Current index over the number of tracks in the playlist");
-            this.Theme0.Click += new System.EventHandler(this.Theme0_Click);
-            // 
-            // Theme1
-            // 
-            this.Theme1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Theme1.BackColor = System.Drawing.Color.Black;
-            this.Theme1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Theme1.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.Theme1.Location = new System.Drawing.Point(21, 91);
-            this.Theme1.Name = "Theme1";
-            this.Theme1.Size = new System.Drawing.Size(8, 8);
-            this.Theme1.TabIndex = 59;
-            this.Theme1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ToolTipProvider.SetToolTip(this.Theme1, "Current index over the number of tracks in the playlist");
-            this.Theme1.Click += new System.EventHandler(this.Theme1_Click);
+            this.Theme4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Theme4.BackColor = System.Drawing.Color.Black;
+            this.Theme4.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Theme4.Font = new System.Drawing.Font("Calibri", 8.25F);
+            this.Theme4.Location = new System.Drawing.Point(56, 91);
+            this.Theme4.Name = "Theme4";
+            this.Theme4.Size = new System.Drawing.Size(8, 8);
+            this.Theme4.TabIndex = 62;
+            this.Theme4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTipProvider.SetToolTip(this.Theme4, "Current index over the number of tracks in the playlist");
+            this.Theme4.Click += new System.EventHandler(this.Theme4_Click);
             // 
             // Theme3
             // 
@@ -239,19 +215,33 @@
             this.ToolTipProvider.SetToolTip(this.Theme2, "Current index over the number of tracks in the playlist");
             this.Theme2.Click += new System.EventHandler(this.Theme2_Click);
             // 
-            // Theme4
+            // Theme1
             // 
-            this.Theme4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Theme4.BackColor = System.Drawing.Color.Black;
-            this.Theme4.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Theme4.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.Theme4.Location = new System.Drawing.Point(56, 91);
-            this.Theme4.Name = "Theme4";
-            this.Theme4.Size = new System.Drawing.Size(8, 8);
-            this.Theme4.TabIndex = 62;
-            this.Theme4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ToolTipProvider.SetToolTip(this.Theme4, "Current index over the number of tracks in the playlist");
-            this.Theme4.Click += new System.EventHandler(this.Theme4_Click);
+            this.Theme1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Theme1.BackColor = System.Drawing.Color.Black;
+            this.Theme1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Theme1.Font = new System.Drawing.Font("Calibri", 8.25F);
+            this.Theme1.Location = new System.Drawing.Point(21, 91);
+            this.Theme1.Name = "Theme1";
+            this.Theme1.Size = new System.Drawing.Size(8, 8);
+            this.Theme1.TabIndex = 59;
+            this.Theme1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTipProvider.SetToolTip(this.Theme1, "Current index over the number of tracks in the playlist");
+            this.Theme1.Click += new System.EventHandler(this.Theme1_Click);
+            // 
+            // Theme0
+            // 
+            this.Theme0.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Theme0.BackColor = System.Drawing.Color.Black;
+            this.Theme0.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Theme0.Font = new System.Drawing.Font("Calibri", 8.25F);
+            this.Theme0.Location = new System.Drawing.Point(10, 91);
+            this.Theme0.Name = "Theme0";
+            this.Theme0.Size = new System.Drawing.Size(8, 8);
+            this.Theme0.TabIndex = 58;
+            this.Theme0.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTipProvider.SetToolTip(this.Theme0, "Current index over the number of tracks in the playlist");
+            this.Theme0.Click += new System.EventHandler(this.Theme0_Click);
             // 
             // VolumeSlider
             // 
@@ -308,11 +298,8 @@
             // 
             // cmdMiniPlayer
             // 
-            this.cmdMiniPlayer.Alpha = 140;
-            this.cmdMiniPlayer.Checked = false;
             this.cmdMiniPlayer.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdMiniPlayer.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdMiniPlayer.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cmdMiniPlayer.Location = new System.Drawing.Point(252, 3);
             this.cmdMiniPlayer.Name = "cmdMiniPlayer";
             this.cmdMiniPlayer.Size = new System.Drawing.Size(20, 20);
@@ -320,14 +307,13 @@
             this.cmdMiniPlayer.Text = "_";
             this.cmdMiniPlayer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdMiniPlayer, "Toggle mini player");
+            this.cmdMiniPlayer.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
+            this.cmdMiniPlayer.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
             // 
             // cmdNext
             // 
-            this.cmdNext.Alpha = 140;
-            this.cmdNext.Checked = false;
             this.cmdNext.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdNext.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdNext.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cmdNext.Location = new System.Drawing.Point(118, 33);
             this.cmdNext.Name = "cmdNext";
             this.cmdNext.Size = new System.Drawing.Size(27, 22);
@@ -336,14 +322,13 @@
             this.cmdNext.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdNext, "Next");
             this.cmdNext.Click += new System.EventHandler(this.cmdNext_Click);
+            this.cmdNext.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
+            this.cmdNext.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
             // 
             // cmdPrevious
             // 
-            this.cmdPrevious.Alpha = 140;
-            this.cmdPrevious.Checked = false;
             this.cmdPrevious.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdPrevious.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdPrevious.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cmdPrevious.Location = new System.Drawing.Point(91, 33);
             this.cmdPrevious.Name = "cmdPrevious";
             this.cmdPrevious.Size = new System.Drawing.Size(27, 22);
@@ -352,14 +337,13 @@
             this.cmdPrevious.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdPrevious, "Previous");
             this.cmdPrevious.Click += new System.EventHandler(this.cmdPrevious_Click);
+            this.cmdPrevious.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
+            this.cmdPrevious.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
             // 
             // cmdStop
             // 
-            this.cmdStop.Alpha = 140;
-            this.cmdStop.Checked = false;
             this.cmdStop.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdStop.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdStop.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cmdStop.Location = new System.Drawing.Point(64, 33);
             this.cmdStop.Name = "cmdStop";
             this.cmdStop.Size = new System.Drawing.Size(27, 22);
@@ -368,14 +352,13 @@
             this.cmdStop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdStop, "Stop");
             this.cmdStop.Click += new System.EventHandler(this.cmdStop_Click);
+            this.cmdStop.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
+            this.cmdStop.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
             // 
             // cmdPause
             // 
-            this.cmdPause.Alpha = 140;
-            this.cmdPause.Checked = false;
             this.cmdPause.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdPause.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdPause.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cmdPause.Location = new System.Drawing.Point(37, 33);
             this.cmdPause.Name = "cmdPause";
             this.cmdPause.Size = new System.Drawing.Size(27, 22);
@@ -384,14 +367,13 @@
             this.cmdPause.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdPause, "Pause");
             this.cmdPause.Click += new System.EventHandler(this.cmdPause_Click);
+            this.cmdPause.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
+            this.cmdPause.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
             // 
             // cmdPlay
             // 
-            this.cmdPlay.Alpha = 140;
-            this.cmdPlay.Checked = false;
             this.cmdPlay.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdPlay.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdPlay.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cmdPlay.Location = new System.Drawing.Point(10, 33);
             this.cmdPlay.Name = "cmdPlay";
             this.cmdPlay.Size = new System.Drawing.Size(27, 22);
@@ -400,14 +382,13 @@
             this.cmdPlay.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdPlay, "Play");
             this.cmdPlay.Click += new System.EventHandler(this.cmdPlay_Click);
+            this.cmdPlay.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
+            this.cmdPlay.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
             // 
             // cmdAlwayOnTop
             // 
-            this.cmdAlwayOnTop.Alpha = 140;
-            this.cmdAlwayOnTop.Checked = false;
             this.cmdAlwayOnTop.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdAlwayOnTop.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdAlwayOnTop.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cmdAlwayOnTop.Location = new System.Drawing.Point(272, 3);
             this.cmdAlwayOnTop.Name = "cmdAlwayOnTop";
             this.cmdAlwayOnTop.Size = new System.Drawing.Size(20, 20);
@@ -416,14 +397,13 @@
             this.cmdAlwayOnTop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdAlwayOnTop, "Always on top");
             this.cmdAlwayOnTop.Click += new System.EventHandler(this.cmdAlwayOnTop_Click);
+            this.cmdAlwayOnTop.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
+            this.cmdAlwayOnTop.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
             // 
             // cmdRandom
             // 
-            this.cmdRandom.Alpha = 140;
-            this.cmdRandom.Checked = false;
             this.cmdRandom.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdRandom.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdRandom.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cmdRandom.Location = new System.Drawing.Point(105, 87);
             this.cmdRandom.Name = "cmdRandom";
             this.cmdRandom.Size = new System.Drawing.Size(48, 20);
@@ -432,14 +412,13 @@
             this.cmdRandom.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdRandom, "Selects the next track to play randomly");
             this.cmdRandom.Click += new System.EventHandler(this.cmdRandom_Click);
+            this.cmdRandom.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
+            this.cmdRandom.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
             // 
             // cmdShuffle
             // 
-            this.cmdShuffle.Alpha = 140;
-            this.cmdShuffle.Checked = false;
             this.cmdShuffle.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdShuffle.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdShuffle.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cmdShuffle.Location = new System.Drawing.Point(153, 87);
             this.cmdShuffle.Name = "cmdShuffle";
             this.cmdShuffle.Size = new System.Drawing.Size(48, 20);
@@ -448,15 +427,14 @@
             this.cmdShuffle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdShuffle, "Randomly shuffles the current playlist");
             this.cmdShuffle.Click += new System.EventHandler(this.cmdShuffle_Click);
+            this.cmdShuffle.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
+            this.cmdShuffle.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
             // 
             // cmdClose
             // 
-            this.cmdClose.Alpha = 140;
             this.cmdClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdClose.Checked = false;
             this.cmdClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdClose.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cmdClose.Location = new System.Drawing.Point(298, 3);
             this.cmdClose.Name = "cmdClose";
             this.cmdClose.Size = new System.Drawing.Size(20, 20);
@@ -465,6 +443,18 @@
             this.cmdClose.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdClose, "Exit");
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
+            this.cmdClose.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
+            this.cmdClose.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
+            // 
+            // Art
+            // 
+            this.Art.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Art.Location = new System.Drawing.Point(234, 32);
+            this.Art.Name = "Art";
+            this.Art.Size = new System.Drawing.Size(75, 75);
+            this.Art.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Art.TabIndex = 32;
+            this.Art.TabStop = false;
             // 
             // PlayerForm
             // 
@@ -498,20 +488,15 @@
         private System.Windows.Forms.Label PlaylistCount;
         private System.Windows.Forms.PictureBox Art;
         private System.Windows.Forms.Label Title;
-        private CheckLabel cmdPlay;
-        private CheckLabel cmdPause;
-        private CheckLabel cmdStop;
-        private CheckLabel cmdPrevious;
-        private CheckLabel cmdNext;
         private BrightIdeasSoftware.FastObjectListView lstPlaylist;
         private BrightIdeasSoftware.OLVColumn ColumnTrack;
         private System.Windows.Forms.Panel FormContainer;
-        private CheckLabel cmdClose;
-        private CheckLabel cmdShuffle;
+        private System.Windows.Forms.Label cmdClose;
+        private System.Windows.Forms.Label cmdShuffle;
         private System.Windows.Forms.ToolTip ToolTipProvider;
-        private CheckLabel cmdRandom;
-        private CheckLabel cmdAlwayOnTop;
-        private CheckLabel cmdMiniPlayer;
+        private System.Windows.Forms.Label cmdRandom;
+        private System.Windows.Forms.Label cmdAlwayOnTop;
+        private System.Windows.Forms.Label cmdMiniPlayer;
         private TrackBar PlaybackSlider;
         private TrackBar VolumeSlider;
         private System.Windows.Forms.Label Theme0;
@@ -519,6 +504,11 @@
         private System.Windows.Forms.Label Theme3;
         private System.Windows.Forms.Label Theme2;
         private System.Windows.Forms.Label Theme1;
+        private System.Windows.Forms.Label cmdPlay;
+        private System.Windows.Forms.Label cmdPause;
+        private System.Windows.Forms.Label cmdStop;
+        private System.Windows.Forms.Label cmdPrevious;
+        private System.Windows.Forms.Label cmdNext;
     }
 }
 
