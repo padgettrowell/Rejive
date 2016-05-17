@@ -41,6 +41,8 @@
             this.Theme2 = new System.Windows.Forms.Label();
             this.Theme1 = new System.Windows.Forms.Label();
             this.Theme0 = new System.Windows.Forms.Label();
+            this.VolumeSlider = new Rejive.TrackBar();
+            this.PlaybackSlider = new Rejive.TrackBar();
             this.cmdNext = new System.Windows.Forms.Label();
             this.cmdPrevious = new System.Windows.Forms.Label();
             this.cmdStop = new System.Windows.Forms.Label();
@@ -51,8 +53,6 @@
             this.cmdClose = new System.Windows.Forms.Label();
             this.Art = new System.Windows.Forms.PictureBox();
             this.ToolTipProvider = new System.Windows.Forms.ToolTip(this.components);
-            this.VolumeSlider = new Rejive.TrackBar();
-            this.PlaybackSlider = new Rejive.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.lstPlaylist)).BeginInit();
             this.FormContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Art)).BeginInit();
@@ -240,6 +240,59 @@
             this.ToolTipProvider.SetToolTip(this.Theme0, "Current index over the number of tracks in the playlist");
             this.Theme0.Click += new System.EventHandler(this.Theme0_Click);
             // 
+            // VolumeSlider
+            // 
+            this.VolumeSlider.BackColor = System.Drawing.Color.Transparent;
+            this.VolumeSlider.BorderColor = System.Drawing.SystemColors.ActiveBorder;
+            this.VolumeSlider.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.VolumeSlider.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(123)))), ((int)(((byte)(125)))), ((int)(((byte)(123)))));
+            this.VolumeSlider.IndentHeight = 6;
+            this.VolumeSlider.Location = new System.Drawing.Point(172, 56);
+            this.VolumeSlider.Maximum = 100;
+            this.VolumeSlider.Minimum = 0;
+            this.VolumeSlider.Name = "VolumeSlider";
+            this.VolumeSlider.Size = new System.Drawing.Size(56, 22);
+            this.VolumeSlider.TabIndex = 57;
+            this.VolumeSlider.TextTickStyle = System.Windows.Forms.TickStyle.None;
+            this.VolumeSlider.TickColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(146)))), ((int)(((byte)(148)))));
+            this.VolumeSlider.TickHeight = 4;
+            this.VolumeSlider.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.ToolTipProvider.SetToolTip(this.VolumeSlider, "Volume");
+            this.VolumeSlider.TrackerColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(130)))), ((int)(((byte)(198)))));
+            this.VolumeSlider.TrackerSize = new System.Drawing.Size(10, 10);
+            this.VolumeSlider.TrackLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(93)))), ((int)(((byte)(90)))));
+            this.VolumeSlider.TrackLineHeight = 1;
+            this.VolumeSlider.Value = 50;
+            this.VolumeSlider.Scroll += new System.EventHandler(this.VolumeSlider_Scroll);
+            // 
+            // PlaybackSlider
+            // 
+            this.PlaybackSlider.BackColor = System.Drawing.Color.Transparent;
+            this.PlaybackSlider.BorderColor = System.Drawing.SystemColors.ActiveBorder;
+            this.PlaybackSlider.Enabled = false;
+            this.PlaybackSlider.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PlaybackSlider.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(123)))), ((int)(((byte)(125)))), ((int)(((byte)(123)))));
+            this.PlaybackSlider.IndentHeight = 6;
+            this.PlaybackSlider.Location = new System.Drawing.Point(13, 56);
+            this.PlaybackSlider.Maximum = 10;
+            this.PlaybackSlider.Minimum = 0;
+            this.PlaybackSlider.Name = "PlaybackSlider";
+            this.PlaybackSlider.Size = new System.Drawing.Size(162, 22);
+            this.PlaybackSlider.TabIndex = 56;
+            this.PlaybackSlider.TextTickStyle = System.Windows.Forms.TickStyle.None;
+            this.PlaybackSlider.TickColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(146)))), ((int)(((byte)(148)))));
+            this.PlaybackSlider.TickHeight = 4;
+            this.PlaybackSlider.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.ToolTipProvider.SetToolTip(this.PlaybackSlider, "Track position");
+            this.PlaybackSlider.TrackerColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(130)))), ((int)(((byte)(198)))));
+            this.PlaybackSlider.TrackerSize = new System.Drawing.Size(10, 10);
+            this.PlaybackSlider.TrackLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(93)))), ((int)(((byte)(90)))));
+            this.PlaybackSlider.TrackLineHeight = 1;
+            this.PlaybackSlider.Value = 0;
+            this.PlaybackSlider.Scroll += new System.EventHandler(this.PlaybackSlider_Scroll);
+            this.PlaybackSlider.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PlaybackSlider_MouseDown);
+            this.PlaybackSlider.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PlaybackSlider_MouseUp);
+            // 
             // cmdNext
             // 
             this.cmdNext.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -371,59 +424,6 @@
             this.Art.TabIndex = 32;
             this.Art.TabStop = false;
             // 
-            // VolumeSlider
-            // 
-            this.VolumeSlider.BackColor = System.Drawing.Color.Transparent;
-            this.VolumeSlider.BorderColor = System.Drawing.SystemColors.ActiveBorder;
-            this.VolumeSlider.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.VolumeSlider.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(123)))), ((int)(((byte)(125)))), ((int)(((byte)(123)))));
-            this.VolumeSlider.IndentHeight = 6;
-            this.VolumeSlider.Location = new System.Drawing.Point(172, 56);
-            this.VolumeSlider.Maximum = 100;
-            this.VolumeSlider.Minimum = 0;
-            this.VolumeSlider.Name = "VolumeSlider";
-            this.VolumeSlider.Size = new System.Drawing.Size(56, 22);
-            this.VolumeSlider.TabIndex = 57;
-            this.VolumeSlider.TextTickStyle = System.Windows.Forms.TickStyle.None;
-            this.VolumeSlider.TickColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(146)))), ((int)(((byte)(148)))));
-            this.VolumeSlider.TickHeight = 4;
-            this.VolumeSlider.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.ToolTipProvider.SetToolTip(this.VolumeSlider, "Volume");
-            this.VolumeSlider.TrackerColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(130)))), ((int)(((byte)(198)))));
-            this.VolumeSlider.TrackerSize = new System.Drawing.Size(10, 10);
-            this.VolumeSlider.TrackLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(93)))), ((int)(((byte)(90)))));
-            this.VolumeSlider.TrackLineHeight = 1;
-            this.VolumeSlider.Value = 50;
-            this.VolumeSlider.Scroll += new System.EventHandler(this.VolumeSlider_Scroll);
-            // 
-            // PlaybackSlider
-            // 
-            this.PlaybackSlider.BackColor = System.Drawing.Color.Transparent;
-            this.PlaybackSlider.BorderColor = System.Drawing.SystemColors.ActiveBorder;
-            this.PlaybackSlider.Enabled = false;
-            this.PlaybackSlider.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PlaybackSlider.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(123)))), ((int)(((byte)(125)))), ((int)(((byte)(123)))));
-            this.PlaybackSlider.IndentHeight = 6;
-            this.PlaybackSlider.Location = new System.Drawing.Point(13, 56);
-            this.PlaybackSlider.Maximum = 10;
-            this.PlaybackSlider.Minimum = 0;
-            this.PlaybackSlider.Name = "PlaybackSlider";
-            this.PlaybackSlider.Size = new System.Drawing.Size(162, 22);
-            this.PlaybackSlider.TabIndex = 56;
-            this.PlaybackSlider.TextTickStyle = System.Windows.Forms.TickStyle.None;
-            this.PlaybackSlider.TickColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(146)))), ((int)(((byte)(148)))));
-            this.PlaybackSlider.TickHeight = 4;
-            this.PlaybackSlider.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.ToolTipProvider.SetToolTip(this.PlaybackSlider, "Track position");
-            this.PlaybackSlider.TrackerColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(130)))), ((int)(((byte)(198)))));
-            this.PlaybackSlider.TrackerSize = new System.Drawing.Size(10, 10);
-            this.PlaybackSlider.TrackLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(93)))), ((int)(((byte)(90)))));
-            this.PlaybackSlider.TrackLineHeight = 1;
-            this.PlaybackSlider.Value = 0;
-            this.PlaybackSlider.Scroll += new System.EventHandler(this.PlaybackSlider_Scroll);
-            this.PlaybackSlider.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PlaybackSlider_MouseDown);
-            this.PlaybackSlider.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PlaybackSlider_MouseUp);
-            // 
             // PlayerForm
             // 
             this.AllowDrop = true;
@@ -438,6 +438,7 @@
             this.MinimumSize = new System.Drawing.Size(325, 400);
             this.Name = "PlayerForm";
             this.Text = "Rejive";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PlayerForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.FormPlayer_Shown);

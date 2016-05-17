@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
+using Un4seen.Bass;
 using DataFormats = System.Windows.Forms.DataFormats;
 using DragDropEffects = System.Windows.Forms.DragDropEffects;
 using DragEventArgs = System.Windows.Forms.DragEventArgs;
@@ -19,6 +20,14 @@ namespace Rejive
         private StickyWindow _stickyWindow;
         private TypedObjectListView<Track> _trackListView;
         private GlobalKeyboardHook _keyboardHook = new GlobalKeyboardHook();
+
+        private int _tickCounter = 0;
+        private int _stream = 0;
+        private DSPPROC _myDSPAddr = null;
+        private SYNCPROC _sync = null;
+        private Un4seen.Bass.BASSTimer _updateTimer = null;
+        private int _deviceLatencyMS = 0; // device latency in milliseconds
+        private int _deviceLatencyBytes = 0; // device latency in bytes
 
         public TypedObjectListView<Track> TrackListView
         {
@@ -39,6 +48,18 @@ namespace Rejive
                 InitThemes();
                 SetThemeToProfile();
 
+                if (Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_LATENCY, this.Handle))
+                {
+                    BASS_INFO info = new BASS_INFO();
+                    Bass.BASS_GetInfo(info);
+                    _deviceLatencyMS = info.latency; 
+                }
+                else
+                {
+                    MessageBox.Show(this, "Error initialising playback", "Unrecoverable error.");
+                    this.Close();
+                }
+
                 if (Session.Profile.PlayerLocation != Point.Empty)
                 {
                     Location = Session.Profile.PlayerLocation;
@@ -55,12 +76,12 @@ namespace Rejive
                 Text = "Rejive";
                 Title.Text = "Rejive";
                 
-                _player = new MediaElementPlayer();
-                //_player = new MCIPlayer();
+                //_player = new MediaElementPlayer();
+                ////_player = new MCIPlayer();
 
-                _player.Init(this);
-                _player.PlaybackComplete += Player_PlaybackComplete;
-                _player.PlaybackPositionChanged += Player_PlaybackPositionChanged;
+                //_player.Init(this);
+                //_player.PlaybackComplete += Player_PlaybackComplete;
+                //_player.PlaybackPositionChanged += Player_PlaybackPositionChanged;
                  
                 lstPlaylist.CellToolTipShowing += Playlist_ToolTipShowing;
             
@@ -74,11 +95,20 @@ namespace Rejive
 
                 //Process any command line args
                 Session.AddFilesToPlaylist(Environment.GetCommandLineArgs());
+
+                _updateTimer = new Un4seen.Bass.BASSTimer(50); //50 ms
+                _updateTimer.Tick += new EventHandler(timerUpdate_Tick);
+
+                _sync = new SYNCPROC(EndPosition);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(string.Format("Error loading player: \n\n{0}", ex), "Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        private void EndPosition(int handle, int channel, int data, IntPtr user)
+        {
+            Bass.BASS_ChannelStop(channel);
         }
 
 
@@ -115,6 +145,63 @@ namespace Rejive
             ToolTipProvider.SetToolTip(cmdPrevious, string.Format("Previous (Hotkey: {0})", Session.Profile.PreviousKey));
             ToolTipProvider.SetToolTip(cmdNext, string.Format("Next (Hotkey: {0})", Session.Profile.NextKey));
             ToolTipProvider.SetToolTip(cmdPause, string.Format("Pause (Hotkey: {0})", Session.Profile.PauseKey));
+        }
+
+        private void timerUpdate_Tick(object sender, System.EventArgs e)
+        {
+            // here we gather info about the stream, when it is playing...
+            if (Bass.BASS_ChannelIsActive(_stream) == BASSActive.BASS_ACTIVE_PLAYING)
+            {
+                // the stream is still playing...
+            }
+            else
+            {
+                // the stream is NOT playing anymore...
+                _updateTimer.Stop();
+                //this.progressBarPeakLeft.Value = 0;
+                //this.progressBarPeakRight.Value = 0;
+                //this.labelTime.Text = "Stopped";
+                //DrawWavePosition(-1, -1);
+                //this.pictureBoxSpectrum.Image = null;
+                //this.buttonStop.Enabled = false;
+                //this.buttonPlay.Enabled = true;
+                return;
+            }
+
+            // from here on, the stream is for sure playing...
+            _tickCounter++;
+            long pos = Bass.BASS_ChannelGetPosition(_stream); // position in bytes
+            long len = Bass.BASS_ChannelGetLength(_stream); // length in bytes
+
+            if (_tickCounter == 5)
+            {
+                // display the position every 250ms (since timer is 50ms)
+                _tickCounter = 0;
+                double totaltime = Bass.BASS_ChannelBytes2Seconds(_stream, len); // the total time length
+                double elapsedtime = Bass.BASS_ChannelBytes2Seconds(_stream, pos); // the elapsed time length
+                double remainingtime = totaltime - elapsedtime;
+                Playback.Text = String.Format("{0:#0.00} / {1:#0.00}", Utils.FixTimespan(elapsedtime, "MMSS"), Utils.FixTimespan(totaltime, "MMSS"));
+                //this.Text = String.Format("Bass-CPU: {0:0.00}% (not including Waves & Spectrum!)", Bass.BASS_GetCPU());
+            }
+
+            // display the level bars
+            int peakL = 0;
+            int peakR = 0;
+            // for testing you might also call RMS_2, RMS_3 or RMS_4
+            //RMS(_stream, out peakL, out peakR);
+            // level to dB
+            double dBlevelL = Utils.LevelToDB(peakL, 65535);
+            double dBlevelR = Utils.LevelToDB(peakR, 65535);
+            //RMS_2(_stream, out peakL, out peakR);
+            //RMS_3(_stream, out peakL, out peakR);
+            //RMS_4(_stream, out peakL, out peakR);
+            //this.progressBarPeakLeft.Value = peakL;
+            //this.progressBarPeakRight.Value = peakR;
+
+            // update the wave position
+            //DrawWavePosition(pos, len);
+            // update spectrum
+            //DrawSpectrum();
         }
 
         private void KeyboardHook_KeyDown(object sender, KeyEventArgs e)
@@ -205,9 +292,87 @@ namespace Rejive
                 Session.Playlist.MoveFirst();
             }
 
+            _updateTimer.Stop();
+            Bass.BASS_StreamFree(_stream);
+
+            _stream = Bass.BASS_StreamCreateFile(Session.Playlist.CurrentItem.TrackPathName, 0, 0, BASSFlag.BASS_SAMPLE_FLOAT | BASSFlag.BASS_STREAM_PRESCAN);
+            if (_stream != 0)
+            {
+                // used in RMS
+                //_30mslength = (int)Bass.BASS_ChannelSeconds2Bytes(_stream, 0.03); // 30ms window
+                                                                                  // latency from milliseconds to bytes
+                _deviceLatencyBytes = (int)Bass.BASS_ChannelSeconds2Bytes(_stream, _deviceLatencyMS / 1000.0);
+
+                // set a DSP user callback method
+                //_myDSPAddr = new DSPPROC(MyDSPGain);
+                //Bass.BASS_ChannelSetDSP(_stream, _myDSPAddr, 0, 2);
+                // if you want to use the above two line instead (uncomment the above and comment below)
+                // _myDSPAddr = new DSPPROC(MyDSPGainUnsafe);
+                //Bass.BASS_ChannelSetDSP(_stream, _myDSPAddr, IntPtr.Zero, 2);
+
+                //if (WF2 != null && WF2.IsRendered)
+                //{
+                //    // make sure playback and wave form are in sync, since
+                //    // we rended with 16-bit but play here with 32-bit
+                //    WF2.SyncPlayback(_stream);
+
+                //    long cuein = WF2.GetMarker("CUE");
+                //    long cueout = WF2.GetMarker("END");
+
+                //    int cueinFrame = WF2.Position2Frames(cuein);
+                //    int cueoutFrame = WF2.Position2Frames(cueout);
+                //    Console.WriteLine("CueIn at {0}sec.; CueOut at {1}sec.", WF2.Frame2Seconds(cueinFrame), WF2.Frame2Seconds(cueoutFrame));
+
+                //    if (cuein >= 0)
+                //    {
+                //        Bass.BASS_ChannelSetPosition(_stream, cuein);
+                //    }
+                //    if (cueout >= 0)
+                //    {
+                //        Bass.BASS_ChannelRemoveSync(_stream, _syncer);
+                //        _syncer = Bass.BASS_ChannelSetSync(_stream, BASSSync.BASS_SYNC_POS, cueout, _sync, IntPtr.Zero);
+                //    }
+                //}
+
+                if (_stream != 0 && Bass.BASS_ChannelPlay(_stream, false))
+                {
+                   
+                    _updateTimer.Start();
+
+                    // get some channel info
+                    BASS_CHANNELINFO info = new BASS_CHANNELINFO();
+                    Bass.BASS_ChannelGetInfo(_stream, info);
+                   // this.textBox1.Text += "Info: " + info.ToString() + Environment.NewLine;
+                    // display the tags...
+                    //TAG_INFO tagInfo = new TAG_INFO(_fileName);
+                    //if (BassTags.BASS_TAG_GetFromFile(_stream, tagInfo))
+                    //{
+                    //    // and display what we get
+                    //    this.textBoxAlbum.Text = tagInfo.album;
+                    //    this.textBoxArtist.Text = tagInfo.artist;
+                    //    this.textBoxTitle.Text = tagInfo.title;
+                    //    this.textBoxComment.Text = tagInfo.comment;
+                    //    this.textBoxGenre.Text = tagInfo.genre;
+                    //    this.textBoxYear.Text = tagInfo.year;
+                    //    this.textBoxTrack.Text = tagInfo.track;
+                    //    this.pictureBoxTagImage.Image = tagInfo.PictureGetImage(0);
+                    //    this.textBoxPicDescr.Text = tagInfo.PictureGetDescription(0);
+                    //    if (this.textBoxPicDescr.Text == String.Empty)
+                    //        this.textBoxPicDescr.Text = tagInfo.PictureGetType(0);
+                    //}
+                    //this.buttonStop.Enabled = true;
+                    //this.buttonPlay.Enabled = false;
+                }
+                else
+                {
+                    Console.WriteLine("Error={0}", Bass.BASS_ErrorGetCode());
+                }
+
+            }
+
             //Load and play
-            _player.Load(Session.Playlist.CurrentItem.TrackPathName);
-            _player.Play();
+            //_player.Load(Session.Playlist.CurrentItem.TrackPathName);
+            //_player.Play();
 
             //Select the item in the playlist 
             TrackListView.SelectedObject = Session.Playlist.CurrentItem;
@@ -236,6 +401,7 @@ namespace Rejive
                 Art.Image = img;
 
         }
+
 
         private void DoMoveNextAndPlay()
         {
@@ -292,7 +458,13 @@ namespace Rejive
 
         private void cmdStop_Click(object sender, EventArgs e)
         {
-            _player.Stop();
+
+            _updateTimer.Stop();
+            //if (WF2 != null && WF2.IsRenderingInProgress)
+            //    WF2.RenderStop();
+
+            Bass.BASS_StreamFree(_stream);
+            _stream = 0;
         }
 
         private void cmdPrevious_Click(object sender, EventArgs e)
@@ -554,6 +726,13 @@ namespace Rejive
             {
                 lbl.ForeColor = _themes[Session.Profile.Theme].ForeColor;
             }
+        }
+
+        private void PlayerForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _updateTimer.Tick -= new EventHandler(timerUpdate_Tick);
+            Bass.BASS_Stop();
+            Bass.BASS_Free();
         }
     }
 }
