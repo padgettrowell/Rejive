@@ -29,6 +29,8 @@ namespace Rejive
         private int _deviceLatencyMS = 0; // device latency in milliseconds
         private int _deviceLatencyBytes = 0; // device latency in bytes
 
+        public delegate void DoMoveNextAndPlayDelegate(); //cause the BASS.NET callback come from another thread and requires invoking
+
         public TypedObjectListView<Track> TrackListView
         {
             get { return _trackListView; }
@@ -47,6 +49,7 @@ namespace Rejive
             {
                 InitThemes();
                 SetThemeToProfile();
+
 
                 if (Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_LATENCY, this.Handle))
                 {
@@ -99,16 +102,19 @@ namespace Rejive
                 _updateTimer = new Un4seen.Bass.BASSTimer(50); //50 ms
                 _updateTimer.Tick += new EventHandler(timerUpdate_Tick);
 
-                _sync = new SYNCPROC(EndPosition);
+                _sync = new SYNCPROC(CurrentTrackEnded);
+                
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show(string.Format("Error loading player: \n\n{0}", ex), "Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void EndPosition(int handle, int channel, int data, IntPtr user)
+        private void CurrentTrackEnded(int handle, int channel, int data, IntPtr user)
         {
             Bass.BASS_ChannelStop(channel);
+            Bass.BASS_StreamFree(_stream);
         }
 
 
@@ -298,9 +304,12 @@ namespace Rejive
             _stream = Bass.BASS_StreamCreateFile(Session.Playlist.CurrentItem.TrackPathName, 0, 0, BASSFlag.BASS_SAMPLE_FLOAT | BASSFlag.BASS_STREAM_PRESCAN);
             if (_stream != 0)
             {
+
+                Bass.BASS_ChannelSetSync(_stream, BASSSync.BASS_SYNC_END, 0, _sync, IntPtr.Zero);
+
                 // used in RMS
                 //_30mslength = (int)Bass.BASS_ChannelSeconds2Bytes(_stream, 0.03); // 30ms window
-                                                                                  // latency from milliseconds to bytes
+                // latency from milliseconds to bytes
                 _deviceLatencyBytes = (int)Bass.BASS_ChannelSeconds2Bytes(_stream, _deviceLatencyMS / 1000.0);
 
                 // set a DSP user callback method
@@ -453,7 +462,16 @@ namespace Rejive
 
         private void cmdPause_Click(object sender, EventArgs e)
         {
-            _player.Pause();
+            BASSActive status = Bass.BASS_ChannelIsActive(_stream);
+
+            if (status == BASSActive.BASS_ACTIVE_PLAYING)
+            {
+                Bass.BASS_ChannelPause(_stream);
+            }
+            else if (status == BASSActive.BASS_ACTIVE_PAUSED)
+            {
+                Bass.BASS_ChannelPlay(_stream, false);
+            }            
         }
 
         private void cmdStop_Click(object sender, EventArgs e)
