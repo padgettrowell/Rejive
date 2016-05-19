@@ -53,9 +53,11 @@
             this.cmdClose = new System.Windows.Forms.Label();
             this.Art = new System.Windows.Forms.PictureBox();
             this.ToolTipProvider = new System.Windows.Forms.ToolTip(this.components);
+            this.WaveForm = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.lstPlaylist)).BeginInit();
             this.FormContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Art)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.WaveForm)).BeginInit();
             this.SuspendLayout();
             // 
             // Playback
@@ -142,6 +144,7 @@
             this.FormContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.FormContainer.Controls.Add(this.WaveForm);
             this.FormContainer.Controls.Add(this.Theme4);
             this.FormContainer.Controls.Add(this.Theme3);
             this.FormContainer.Controls.Add(this.Theme2);
@@ -273,11 +276,11 @@
             this.PlaybackSlider.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PlaybackSlider.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(123)))), ((int)(((byte)(125)))), ((int)(((byte)(123)))));
             this.PlaybackSlider.IndentHeight = 6;
-            this.PlaybackSlider.Location = new System.Drawing.Point(13, 56);
+            this.PlaybackSlider.Location = new System.Drawing.Point(205, 5);
             this.PlaybackSlider.Maximum = 10;
             this.PlaybackSlider.Minimum = 0;
             this.PlaybackSlider.Name = "PlaybackSlider";
-            this.PlaybackSlider.Size = new System.Drawing.Size(162, 22);
+            this.PlaybackSlider.Size = new System.Drawing.Size(43, 22);
             this.PlaybackSlider.TabIndex = 56;
             this.PlaybackSlider.TextTickStyle = System.Windows.Forms.TickStyle.None;
             this.PlaybackSlider.TickColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(146)))), ((int)(((byte)(148)))));
@@ -424,6 +427,17 @@
             this.Art.TabIndex = 32;
             this.Art.TabStop = false;
             // 
+            // WaveForm
+            // 
+            this.WaveForm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.WaveForm.Location = new System.Drawing.Point(10, 58);
+            this.WaveForm.Name = "WaveForm";
+            this.WaveForm.Size = new System.Drawing.Size(165, 26);
+            this.WaveForm.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.WaveForm.TabIndex = 63;
+            this.WaveForm.TabStop = false;
+            this.WaveForm.MouseDown += new System.Windows.Forms.MouseEventHandler(this.WaveForm_MouseDown);
+            // 
             // PlayerForm
             // 
             this.AllowDrop = true;
@@ -447,6 +461,7 @@
             this.FormContainer.ResumeLayout(false);
             this.FormContainer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Art)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.WaveForm)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -476,6 +491,7 @@
         private System.Windows.Forms.Label cmdStop;
         private System.Windows.Forms.Label cmdPrevious;
         private System.Windows.Forms.Label cmdNext;
+        private System.Windows.Forms.PictureBox WaveForm;
     }
 }
 

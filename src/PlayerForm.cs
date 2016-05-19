@@ -8,6 +8,7 @@ using DragDropEffects = System.Windows.Forms.DragDropEffects;
 using DragEventArgs = System.Windows.Forms.DragEventArgs;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Point = System.Drawing.Point;
+using Un4seen.Bass.Misc;
 
 namespace Rejive
 {
@@ -30,6 +31,7 @@ namespace Rejive
         private int _deviceLatencyBytes = 0; // device latency in bytes
 
         public delegate void DoMoveNextAndPlayDelegate(); //cause the BASS.NET callback come from another thread and requires invoking
+        private DoMoveNextAndPlayDelegate _doMoveNextAndPlayDelegate;
 
         public TypedObjectListView<Track> TrackListView
         {
@@ -50,6 +52,7 @@ namespace Rejive
                 InitThemes();
                 SetThemeToProfile();
 
+                _doMoveNextAndPlayDelegate = DoMoveNextAndPlay;
 
                 if (Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_LATENCY, this.Handle))
                 {
@@ -115,6 +118,7 @@ namespace Rejive
         {
             Bass.BASS_ChannelStop(channel);
             Bass.BASS_StreamFree(_stream);
+            this.Invoke(_doMoveNextAndPlayDelegate);
         }
 
 
@@ -166,8 +170,8 @@ namespace Rejive
                 _updateTimer.Stop();
                 //this.progressBarPeakLeft.Value = 0;
                 //this.progressBarPeakRight.Value = 0;
-                //this.labelTime.Text = "Stopped";
-                //DrawWavePosition(-1, -1);
+                Playback.Text = "00:00 / 00:00";
+                DrawWavePosition(-1, -1);
                 //this.pictureBoxSpectrum.Image = null;
                 //this.buttonStop.Enabled = false;
                 //this.buttonPlay.Enabled = true;
@@ -205,9 +209,146 @@ namespace Rejive
             //this.progressBarPeakRight.Value = peakR;
 
             // update the wave position
-            //DrawWavePosition(pos, len);
+            DrawWavePosition(pos, len);
             // update spectrum
             //DrawSpectrum();
+        }
+
+        private void DrawWavePosition(long pos, long len)
+        {
+            // Note: we might take the latency of the device into account here!
+            // so we show the position as heard, not played.
+            // That's why we called Bass.Bass_Init with the BASS_DEVICE_LATENCY flag
+            // and then used the BASS_INFO structure to get the latency of the device
+
+            if (len == 0 || pos < 0)
+            {
+                WaveForm.Image = null;
+                return;
+            }
+
+            Bitmap bitmap = null;
+            Graphics g = null;
+            Pen p = null;
+            double bpp = 0;
+
+            try
+            {
+                //if (_zoomed)
+                //{
+                //    // total length doesn't have to be _zoomDistance sec. here
+                //    len = WF2.Frame2Bytes(_zoomEnd) - _zoomStartBytes;
+
+                //    int scrollOffset = 10; // 10*20ms = 200ms.
+                //                           // if we scroll out the window...(scrollOffset*20ms before the zoom window ends)
+                //    if (pos > (_zoomStartBytes + len - scrollOffset * WF2.Wave.bpf))
+                //    {
+                //        // we 'scroll' our zoom with a little offset
+                //        _zoomStart = WF2.Position2Frames(pos - scrollOffset * WF2.Wave.bpf);
+                //        _zoomStartBytes = WF2.Frame2Bytes(_zoomStart);
+                //        _zoomEnd = _zoomStart + WF2.Position2Frames(_zoomDistance) - 1;
+                //        if (_zoomEnd >= WF2.Wave.data.Length)
+                //        {
+                //            // beyond the end, so we zoom from end - _zoomDistance.
+                //            _zoomEnd = WF2.Wave.data.Length - 1;
+                //            _zoomStart = _zoomEnd - WF2.Position2Frames(_zoomDistance) + 1;
+                //            if (_zoomStart < 0)
+                //                _zoomStart = 0;
+                //            _zoomStartBytes = WF2.Frame2Bytes(_zoomStart);
+                //            // total length doesn't have to be _zoomDistance sec. here
+                //            len = WF2.Frame2Bytes(_zoomEnd) - _zoomStartBytes;
+                //        }
+                //        // get the new wave image for the new zoom window
+                //        DrawWave();
+                //    }
+                //    // zoomed: starts with _zoomStartBytes and is _zoomDistance long
+                //    pos -= _zoomStartBytes; // offset of the zoomed window
+
+                //    bpp = len / (double)this.pictureBox1.Width;  // bytes per pixel
+                //}
+                //else
+                //{
+                    // not zoomed: width = length of stream
+                    bpp = len / (double)this.WaveForm.Width;  // bytes per pixel
+                //}
+
+                // we take the device latency into account
+                // Not really needed, but if you have a real slow device, you might need the next line
+                // so the BASS_ChannelGetPosition might return a position ahead of what we hear
+                pos -= _deviceLatencyBytes;
+
+                p = new Pen(Color.Red);
+                bitmap = new Bitmap(this.WaveForm.Width, this.WaveForm.Height);
+                g = Graphics.FromImage(bitmap);
+                g.Clear(_themes[Session.Profile.Theme].BackColor);
+                int x = (int)Math.Round(pos / bpp);  // position (x) where to draw the line
+                g.DrawLine(p, x, 0, x, this.WaveForm.Height - 1);
+                bitmap.MakeTransparent(_themes[Session.Profile.Theme].BackColor);
+            }
+            catch
+            {
+                bitmap = null;
+            }
+            finally
+            {
+                // clean up graphics resources
+                if (p != null)
+                    p.Dispose();
+                if (g != null)
+                    g.Dispose();
+            }
+
+            this.WaveForm.Image = bitmap;
+        }
+
+        // zoom helper varibales
+        //private int _zoomStart = -1;
+        //private long _zoomStartBytes = -1;
+        //private int _zoomEnd = -1;
+        //private float _zoomDistance = 5.0f; // zoom = 5sec.
+
+        private WaveForm WF2 = null;
+        private void GetWaveForm()
+        {
+            // render a wave form
+            WF2 = new WaveForm(Session.Playlist.CurrentItem.TrackPathName, new WAVEFORMPROC(MyWaveFormCallback), this);
+            WF2.FrameResolution = 0.01f; // 10ms are nice
+            WF2.CallbackFrequency = 2000; // every 30 seconds rendered (3000*10ms=30sec)
+            WF2.ColorBackground = Color.WhiteSmoke;
+            WF2.ColorLeft = Color.Gainsboro;
+            WF2.ColorLeftEnvelope = Color.Gray;
+            WF2.ColorRight = Color.LightGray;
+            WF2.ColorRightEnvelope = Color.DimGray;
+            WF2.ColorMarker = Color.DarkBlue;
+            WF2.DrawWaveForm = Un4seen.Bass.Misc.WaveForm.WAVEFORMDRAWTYPE.Stereo;
+            WF2.DrawMarker = Un4seen.Bass.Misc.WaveForm.MARKERDRAWTYPE.Line | Un4seen.Bass.Misc.WaveForm.MARKERDRAWTYPE.Name | Un4seen.Bass.Misc.WaveForm.MARKERDRAWTYPE.NamePositionAlternate;
+            WF2.MarkerLength = 0.75f;
+            // our playing stream will be in 32-bit float!
+            // but here we render with 16-bit (default) - just to demo the WF2.SyncPlayback method
+            WF2.RenderStart(true, BASSFlag.BASS_DEFAULT);
+        }
+
+        private void MyWaveFormCallback(int framesDone, int framesTotal, TimeSpan elapsedTime, bool finished)
+        {
+            if (finished)
+            {
+                // auto detect silence at beginning and end
+                long cuein = 0;
+                long cueout = 0;
+                WF2.GetCuePoints(ref cuein, ref cueout, -25.0, -42.0, -1, -1);
+                WF2.AddMarker("CUE", cuein);
+                WF2.AddMarker("END", cueout);
+            }
+            // will be called during rendering...
+            DrawWave();
+        }
+
+        private void DrawWave()
+        {
+            if (WF2 != null)
+                this.WaveForm.BackgroundImage = WF2.CreateBitmap(this.WaveForm.Width, this.WaveForm.Height, -1, -1, true);
+            else
+                this.WaveForm.BackgroundImage = null;
         }
 
         private void KeyboardHook_KeyDown(object sender, KeyEventArgs e)
@@ -297,6 +438,8 @@ namespace Rejive
             {
                 Session.Playlist.MoveFirst();
             }
+
+            GetWaveForm();
 
             _updateTimer.Stop();
             Bass.BASS_StreamFree(_stream);
@@ -751,6 +894,15 @@ namespace Rejive
             _updateTimer.Tick -= new EventHandler(timerUpdate_Tick);
             Bass.BASS_Stop();
             Bass.BASS_Free();
+        }
+
+        private void WaveForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (WF2 == null)
+                return;
+
+            long pos = WF2.GetBytePositionFromX(e.X, this.WaveForm.Width, -1, -1);
+            Bass.BASS_ChannelSetPosition(_stream, pos);
         }
     }
 }
