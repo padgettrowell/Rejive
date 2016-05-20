@@ -325,7 +325,11 @@ namespace Rejive
             WF2.MarkerLength = 0.75f;
             // our playing stream will be in 32-bit float!
             // but here we render with 16-bit (default) - just to demo the WF2.SyncPlayback method
-            WF2.RenderStart(true, BASSFlag.BASS_DEFAULT);
+            WF2.RenderStart(true, BASSFlag.BASS_SAMPLE_FLOAT); //BASS_DEFAULT
+
+            //http://www.bass.radio42.com/help/html/5264843d-133d-a4ca-9eaf-8f97571c3736.htm
+            //Note: The byte position relates to the resolution you used with RenderStart(Int32, Boolean)!So if you for example used the BASS_SAMPLE_FLOAT with RenderStart(Int32, Boolean) the byte position relates to 32 - bit sample data.However, if your playing stream uses only a 16 - bit resolution(e.g.you used BASS_DEFAULT with BASS_StreamCreateFile(String, Int64, Int64, BASSFlag)), the returned byte position will not match!So make sure when you are calling BASS_ChannelSetPosition(Int32, Int64, BASSMode) with this return value, that your stream resolution is the same as the resolution used with RenderStart(Int32, Boolean).Otherwise you must convert the returned byte position(e.g.from 32 - bit to 16 - bit: pos = returnvalue / 2). Or for ease of use you might use the SyncPlayback(Int32) method to ensure, that the return value of this method will already be converted accordingly for you!
+
         }
 
         private void MyWaveFormCallback(int framesDone, int framesTotal, TimeSpan elapsedTime, bool finished)
@@ -444,7 +448,7 @@ namespace Rejive
             _updateTimer.Stop();
             Bass.BASS_StreamFree(_stream);
 
-            _stream = Bass.BASS_StreamCreateFile(Session.Playlist.CurrentItem.TrackPathName, 0, 0, BASSFlag.BASS_SAMPLE_FLOAT | BASSFlag.BASS_STREAM_PRESCAN);
+            _stream = Bass.BASS_StreamCreateFile(Session.Playlist.CurrentItem.TrackPathName, 0, 0, BASSFlag.BASS_SAMPLE_FLOAT| BASSFlag.BASS_STREAM_PRESCAN); //BASS_SAMPLE_FLOAT or BASS_DEFAULT
             if (_stream != 0)
             {
 
@@ -901,8 +905,17 @@ namespace Rejive
             if (WF2 == null)
                 return;
 
-            long pos = WF2.GetBytePositionFromX(e.X, this.WaveForm.Width, -1, -1);
-            Bass.BASS_ChannelSetPosition(_stream, pos);
+            long currentPlayingPos = Bass.BASS_ChannelGetPosition(this._stream);
+            long length = Bass.BASS_ChannelGetLength(_stream);
+
+            long moveToPos = WF2.GetBytePositionFromX(e.X, this.WaveForm.Width, -1, -1);
+
+
+           if (! Bass.BASS_ChannelSetPosition(_stream, moveToPos))
+            {
+                var error = Bass.BASS_ErrorGetCode();
+                MessageBox.Show(error.ToString());            }
+            
         }
     }
 }

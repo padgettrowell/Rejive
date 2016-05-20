@@ -36,6 +36,7 @@
             this.lstPlaylist = new BrightIdeasSoftware.FastObjectListView();
             this.ColumnTrack = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.FormContainer = new System.Windows.Forms.Panel();
+            this.WaveForm = new System.Windows.Forms.PictureBox();
             this.Theme4 = new System.Windows.Forms.Label();
             this.Theme3 = new System.Windows.Forms.Label();
             this.Theme2 = new System.Windows.Forms.Label();
@@ -53,11 +54,10 @@
             this.cmdClose = new System.Windows.Forms.Label();
             this.Art = new System.Windows.Forms.PictureBox();
             this.ToolTipProvider = new System.Windows.Forms.ToolTip(this.components);
-            this.WaveForm = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.lstPlaylist)).BeginInit();
             this.FormContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Art)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.WaveForm)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Art)).BeginInit();
             this.SuspendLayout();
             // 
             // Playback
@@ -172,6 +172,16 @@
             this.FormContainer.TabIndex = 47;
             this.FormContainer.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form_DragDrop);
             this.FormContainer.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form_DragEnter);
+            // 
+            // WaveForm
+            // 
+            this.WaveForm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.WaveForm.Location = new System.Drawing.Point(10, 58);
+            this.WaveForm.Name = "WaveForm";
+            this.WaveForm.Size = new System.Drawing.Size(165, 26);
+            this.WaveForm.TabIndex = 63;
+            this.WaveForm.TabStop = false;
+            this.WaveForm.MouseDown += new System.Windows.Forms.MouseEventHandler(this.WaveForm_MouseDown);
             // 
             // Theme4
             // 
@@ -427,17 +437,6 @@
             this.Art.TabIndex = 32;
             this.Art.TabStop = false;
             // 
-            // WaveForm
-            // 
-            this.WaveForm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.WaveForm.Location = new System.Drawing.Point(10, 58);
-            this.WaveForm.Name = "WaveForm";
-            this.WaveForm.Size = new System.Drawing.Size(165, 26);
-            this.WaveForm.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.WaveForm.TabIndex = 63;
-            this.WaveForm.TabStop = false;
-            this.WaveForm.MouseDown += new System.Windows.Forms.MouseEventHandler(this.WaveForm_MouseDown);
-            // 
             // PlayerForm
             // 
             this.AllowDrop = true;
@@ -460,8 +459,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.lstPlaylist)).EndInit();
             this.FormContainer.ResumeLayout(false);
             this.FormContainer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Art)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.WaveForm)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Art)).EndInit();
             this.ResumeLayout(false);
 
         }
