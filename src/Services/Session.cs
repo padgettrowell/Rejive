@@ -16,10 +16,7 @@ namespace Rejive
 
         public static void RaisePlaylistChanged()
         {
-            if (PlaylistChanged != null)
-            {
-                PlaylistChanged();
-            }
+            PlaylistChanged?.Invoke();
         }
 
         public static bool IsOnScreen(Form form)

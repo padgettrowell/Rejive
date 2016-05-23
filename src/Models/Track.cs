@@ -8,7 +8,6 @@ namespace Rejive
     [Serializable]
     public class Track
     {
-
         public string TrackName { get; set; }
         public string TrackPathName { get; set; }
         public Track() { }
@@ -26,6 +25,12 @@ namespace Rejive
             try
             {
                 string imagePath = Path.Combine(Path.GetDirectoryName(TrackPathName), "folder.jpg");
+                if (File.Exists(imagePath))
+                {
+                    return Image.FromFile(imagePath);
+                }
+
+                imagePath = Path.Combine(Path.GetDirectoryName(TrackPathName), "cover.jpg");
                 if (File.Exists(imagePath))
                 {
                     return Image.FromFile(imagePath);

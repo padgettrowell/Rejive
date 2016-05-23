@@ -13,12 +13,7 @@ namespace Rejive
         /// <summary>
         /// The contructor 
         /// </summary>
-        private TrackBarDrawStyleHelper()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
+        private TrackBarDrawStyleHelper() {}
 
         /// <summary>
         /// 

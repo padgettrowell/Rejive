@@ -232,7 +232,7 @@ namespace Rejive
 		[Category("Behavior")]
 		[Description("Gets or sets the height of track line.")]
 		[DefaultValue(true)]
-		public bool AutoSize
+		override public bool AutoSize
 		{
 			get { return _autoSize; }
 

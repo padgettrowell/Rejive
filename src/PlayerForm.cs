@@ -72,11 +72,8 @@ namespace Rejive
                 _player.PropertyChanged += Player_PropertyChanged;              
 
                 LoadPlaylist();
-
-                //Keyboard hooks
                 BindKeys();
 
-                //Process any command line args
                 Session.AddFilesToPlaylist(Environment.GetCommandLineArgs());
             }
             catch (Exception ex)
@@ -92,8 +89,8 @@ namespace Rejive
                 new Theme() { ForeColor = Color.Lime, BackColor = Color.DarkSlateGray, HighlightColor = Color.DarkOrange},
                 new Theme() { ForeColor = Color.LightSkyBlue, BackColor = Color.DarkSlateGray, HighlightColor = Color.Yellow},
                 new Theme() { ForeColor = Color.DarkOrange, BackColor = Color.DarkSlateGray, HighlightColor = Color.Lime },
-                new Theme() { ForeColor = Color.DodgerBlue, BackColor = Color.White, HighlightColor = Color.DarkOrange },
-                new Theme() { ForeColor = Color.DarkOrange, BackColor = Color.White, HighlightColor = Color.DodgerBlue }
+                new Theme() { ForeColor = Color.Black, BackColor = Color.White, HighlightColor = Color.OrangeRed },
+                new Theme() { ForeColor = Color.OrangeRed, BackColor = Color.White, HighlightColor = Color.Black }
             };
 
             Theme0.BackColor = _themes[0].ForeColor;
@@ -459,30 +456,13 @@ namespace Rejive
                 }
                 else
                 {
+                    // it's a file
                     Session.AddFileToPlayList(s);
                 }
 
             }
         }
      
-        private void PlayerForm_Paint(object sender, PaintEventArgs e)
-        {
-            //var inner = new Rectangle(ClientRectangle.Location, ClientRectangle.Size);
-            //inner.Inflate(-1, -1);
-
-            //ControlPaint.DrawBorder(
-            //    e.Graphics,
-            //    inner,
-            //    ForeColor,
-            //    ButtonBorderStyle.Solid);
-
-            //ControlPaint.DrawBorder(
-            //    e.Graphics,
-            //    ClientRectangle,
-            //    BackColor,
-            //    ButtonBorderStyle.Solid);
-        }
-
         protected override void WndProc(ref Message m)
         {
             if (!Disposing)

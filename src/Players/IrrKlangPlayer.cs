@@ -113,10 +113,7 @@ namespace Rejive
 
                 _currentPlayback.setSoundStopEventReceiver(this);
 
-                if (_currentPlayback.PlayLength == -1)
-                    TrackDuration = TimeSpan.FromSeconds(0);
-                else
-                    TrackDuration = TimeSpan.FromMilliseconds(_currentPlayback.PlayLength);
+               TrackDuration = TimeSpan.FromMilliseconds(_currentPlayback.PlayLength);
 
                 OnPlaybackPositionChanged(TimeSpan.FromSeconds(0));
 

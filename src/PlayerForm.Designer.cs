@@ -67,7 +67,7 @@
             this.Playback.AutoSize = true;
             this.Playback.Font = new System.Drawing.Font("Calibri", 8.25F);
             this.Playback.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Playback.Location = new System.Drawing.Point(214, 43);
+            this.Playback.Location = new System.Drawing.Point(214, 48);
             this.Playback.Name = "Playback";
             this.Playback.Size = new System.Drawing.Size(69, 13);
             this.Playback.TabIndex = 18;
@@ -314,7 +314,7 @@
             // 
             this.cmdPlayPause.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdPlayPause.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdPlayPause.Location = new System.Drawing.Point(128, 43);
+            this.cmdPlayPause.Location = new System.Drawing.Point(130, 43);
             this.cmdPlayPause.Name = "cmdPlayPause";
             this.cmdPlayPause.Size = new System.Drawing.Size(56, 22);
             this.cmdPlayPause.TabIndex = 42;
@@ -327,11 +327,12 @@
             // 
             // cmdAlwayOnTop
             // 
+            this.cmdAlwayOnTop.AutoSize = true;
             this.cmdAlwayOnTop.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdAlwayOnTop.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdAlwayOnTop.Location = new System.Drawing.Point(272, 10);
+            this.cmdAlwayOnTop.Location = new System.Drawing.Point(291, 6);
             this.cmdAlwayOnTop.Name = "cmdAlwayOnTop";
-            this.cmdAlwayOnTop.Size = new System.Drawing.Size(20, 20);
+            this.cmdAlwayOnTop.Size = new System.Drawing.Size(12, 13);
             this.cmdAlwayOnTop.TabIndex = 52;
             this.cmdAlwayOnTop.Text = "^";
             this.cmdAlwayOnTop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -358,11 +359,12 @@
             // cmdClose
             // 
             this.cmdClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmdClose.AutoSize = true;
             this.cmdClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdClose.Location = new System.Drawing.Point(298, 10);
+            this.cmdClose.Location = new System.Drawing.Point(305, 6);
             this.cmdClose.Name = "cmdClose";
-            this.cmdClose.Size = new System.Drawing.Size(20, 20);
+            this.cmdClose.Size = new System.Drawing.Size(14, 13);
             this.cmdClose.TabIndex = 49;
             this.cmdClose.Text = "X";
             this.cmdClose.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -374,7 +376,7 @@
             // Art
             // 
             this.Art.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Art.Location = new System.Drawing.Point(7, 10);
+            this.Art.Location = new System.Drawing.Point(6, 8);
             this.Art.Name = "Art";
             this.Art.Size = new System.Drawing.Size(90, 90);
             this.Art.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -419,7 +421,7 @@
             this.PlaybackSlider.Maximum = 10;
             this.PlaybackSlider.Minimum = 0;
             this.PlaybackSlider.Name = "PlaybackSlider";
-            this.PlaybackSlider.Size = new System.Drawing.Size(162, 22);
+            this.PlaybackSlider.Size = new System.Drawing.Size(189, 22);
             this.PlaybackSlider.TabIndex = 56;
             this.PlaybackSlider.TextTickStyle = System.Windows.Forms.TickStyle.None;
             this.PlaybackSlider.TickColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(146)))), ((int)(((byte)(148)))));
@@ -452,7 +454,6 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.FormPlayer_Shown);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.PlayerForm_Paint);
             this.FormContainer.ResumeLayout(false);
             this.FormContainer.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
