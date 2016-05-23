@@ -140,12 +140,21 @@
       <DependentUpon>PlayerForm.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Models\Track.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\FileSearcher.cs" />
     <Compile Include="Models\Profile.cs" />
     <Compile Include="Services\PlaylistShuffler.cs" />
     <Compile Include="Services\ProfileService.cs" />
     <Compile Include="Services\Session.cs" />
     <Compile Include="Services\ThemeSetter.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ikpFlac.dll">

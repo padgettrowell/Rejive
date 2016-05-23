@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using DataFormats = System.Windows.Forms.DataFormats;
 using DragDropEffects = System.Windows.Forms.DragDropEffects;
@@ -446,7 +447,22 @@ namespace Rejive
         /// </summary>
         private void Form_DragDrop(object sender, DragEventArgs e)
         {
-            Session.AddFilesToPlaylist((string[]) e.Data.GetData(DataFormats.FileDrop));
+
+            var dropResults = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            foreach(string s in dropResults)
+            {
+                //handle dropping directories
+                if (File.GetAttributes(s).HasFlag(FileAttributes.Directory))
+                {
+                    Session.AddFilesToPlaylist(FileSearcher.GetAllFilesInDirectoryAndSubdirectories(s));
+                }
+                else
+                {
+                    Session.AddFileToPlayList(s);
+                }
+
+            }
         }
      
         private void PlayerForm_Paint(object sender, PaintEventArgs e)
@@ -605,7 +621,5 @@ namespace Rejive
                 }
             }
         }
-
-
     }
 }

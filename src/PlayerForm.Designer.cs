@@ -31,9 +31,11 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PlayerForm));
             this.Playback = new System.Windows.Forms.Label();
-            this.PlaylistCount = new System.Windows.Forms.Label();
             this.Title = new System.Windows.Forms.Label();
             this.FormContainer = new System.Windows.Forms.Panel();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.lblInfo = new System.Windows.Forms.ToolStripStatusLabel();
+            this.PlaylistCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.lstPlaylist = new System.Windows.Forms.ListView();
             this.colCurrent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colTrack = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -54,8 +56,8 @@
             this.ToolTipProvider = new System.Windows.Forms.ToolTip(this.components);
             this.VolumeSlider = new Rejive.TrackBar();
             this.PlaybackSlider = new Rejive.TrackBar();
-            this.lblInfo = new System.Windows.Forms.Label();
             this.FormContainer.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Art)).BeginInit();
             this.SuspendLayout();
             // 
@@ -65,24 +67,12 @@
             this.Playback.AutoSize = true;
             this.Playback.Font = new System.Drawing.Font("Calibri", 8.25F);
             this.Playback.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Playback.Location = new System.Drawing.Point(214, 46);
+            this.Playback.Location = new System.Drawing.Point(214, 43);
             this.Playback.Name = "Playback";
             this.Playback.Size = new System.Drawing.Size(69, 13);
             this.Playback.TabIndex = 18;
             this.Playback.Text = "00:00 / 00:00";
             this.Playback.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // PlaylistCount
-            // 
-            this.PlaylistCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.PlaylistCount.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.PlaylistCount.Location = new System.Drawing.Point(191, 91);
-            this.PlaylistCount.Name = "PlaylistCount";
-            this.PlaylistCount.Size = new System.Drawing.Size(48, 13);
-            this.PlaylistCount.TabIndex = 17;
-            this.PlaylistCount.Text = "0/0";
-            this.PlaylistCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ToolTipProvider.SetToolTip(this.PlaylistCount, "Current index over the number of tracks in the playlist");
             // 
             // Title
             // 
@@ -105,7 +95,7 @@
             this.FormContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.FormContainer.Controls.Add(this.lblInfo);
+            this.FormContainer.Controls.Add(this.statusStrip1);
             this.FormContainer.Controls.Add(this.lstPlaylist);
             this.FormContainer.Controls.Add(this.lblHeader);
             this.FormContainer.Controls.Add(this.cmdEnqueue);
@@ -124,7 +114,6 @@
             this.FormContainer.Controls.Add(this.cmdShuffle);
             this.FormContainer.Controls.Add(this.cmdClose);
             this.FormContainer.Controls.Add(this.Title);
-            this.FormContainer.Controls.Add(this.PlaylistCount);
             this.FormContainer.Controls.Add(this.Art);
             this.FormContainer.Location = new System.Drawing.Point(2, 2);
             this.FormContainer.MinimumSize = new System.Drawing.Size(321, 396);
@@ -133,6 +122,34 @@
             this.FormContainer.TabIndex = 47;
             this.FormContainer.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form_DragDrop);
             this.FormContainer.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form_DragEnter);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lblInfo,
+            this.PlaylistCount});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 374);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(321, 22);
+            this.statusStrip1.TabIndex = 67;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // lblInfo
+            // 
+            this.lblInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.lblInfo.Font = new System.Drawing.Font("Calibri", 8.25F);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(283, 17);
+            this.lblInfo.Spring = true;
+            // 
+            // PlaylistCount
+            // 
+            this.PlaylistCount.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.PlaylistCount.Font = new System.Drawing.Font("Calibri", 8.25F);
+            this.PlaylistCount.Name = "PlaylistCount";
+            this.PlaylistCount.Size = new System.Drawing.Size(23, 17);
+            this.PlaylistCount.Text = "0/0";
+            this.PlaylistCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lstPlaylist
             // 
@@ -149,7 +166,7 @@
             this.lstPlaylist.Location = new System.Drawing.Point(3, 110);
             this.lstPlaylist.Name = "lstPlaylist";
             this.lstPlaylist.ShowGroups = false;
-            this.lstPlaylist.Size = new System.Drawing.Size(315, 282);
+            this.lstPlaylist.Size = new System.Drawing.Size(315, 261);
             this.lstPlaylist.TabIndex = 65;
             this.lstPlaylist.UseCompatibleStateImageBehavior = false;
             this.lstPlaylist.View = System.Windows.Forms.View.Details;
@@ -188,7 +205,7 @@
             this.cmdEnqueue.Name = "cmdEnqueue";
             this.cmdEnqueue.Size = new System.Drawing.Size(58, 20);
             this.cmdEnqueue.TabIndex = 63;
-            this.cmdEnqueue.Text = "&Enqueue...";
+            this.cmdEnqueue.Text = "Enqueue...";
             this.cmdEnqueue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdEnqueue, "Randomly shuffles the current playlist");
             this.cmdEnqueue.Click += new System.EventHandler(this.cmdEnqueue_Click);
@@ -199,7 +216,7 @@
             this.Theme4.BackColor = System.Drawing.Color.Black;
             this.Theme4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Theme4.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.Theme4.Location = new System.Drawing.Point(56, 91);
+            this.Theme4.Location = new System.Drawing.Point(295, 93);
             this.Theme4.Name = "Theme4";
             this.Theme4.Size = new System.Drawing.Size(8, 8);
             this.Theme4.TabIndex = 62;
@@ -213,7 +230,7 @@
             this.Theme3.BackColor = System.Drawing.Color.Black;
             this.Theme3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Theme3.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.Theme3.Location = new System.Drawing.Point(44, 91);
+            this.Theme3.Location = new System.Drawing.Point(283, 93);
             this.Theme3.Name = "Theme3";
             this.Theme3.Size = new System.Drawing.Size(8, 8);
             this.Theme3.TabIndex = 61;
@@ -227,7 +244,7 @@
             this.Theme2.BackColor = System.Drawing.Color.Black;
             this.Theme2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Theme2.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.Theme2.Location = new System.Drawing.Point(33, 91);
+            this.Theme2.Location = new System.Drawing.Point(272, 93);
             this.Theme2.Name = "Theme2";
             this.Theme2.Size = new System.Drawing.Size(8, 8);
             this.Theme2.TabIndex = 60;
@@ -241,7 +258,7 @@
             this.Theme1.BackColor = System.Drawing.Color.Black;
             this.Theme1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Theme1.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.Theme1.Location = new System.Drawing.Point(21, 91);
+            this.Theme1.Location = new System.Drawing.Point(260, 93);
             this.Theme1.Name = "Theme1";
             this.Theme1.Size = new System.Drawing.Size(8, 8);
             this.Theme1.TabIndex = 59;
@@ -255,7 +272,7 @@
             this.Theme0.BackColor = System.Drawing.Color.Black;
             this.Theme0.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Theme0.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.Theme0.Location = new System.Drawing.Point(10, 91);
+            this.Theme0.Location = new System.Drawing.Point(249, 93);
             this.Theme0.Name = "Theme0";
             this.Theme0.Size = new System.Drawing.Size(8, 8);
             this.Theme0.TabIndex = 58;
@@ -267,7 +284,7 @@
             // 
             this.cmdNext.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdNext.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdNext.Location = new System.Drawing.Point(181, 41);
+            this.cmdNext.Location = new System.Drawing.Point(181, 43);
             this.cmdNext.Name = "cmdNext";
             this.cmdNext.Size = new System.Drawing.Size(27, 22);
             this.cmdNext.TabIndex = 45;
@@ -282,7 +299,7 @@
             // 
             this.cmdPrevious.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdPrevious.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdPrevious.Location = new System.Drawing.Point(109, 41);
+            this.cmdPrevious.Location = new System.Drawing.Point(109, 43);
             this.cmdPrevious.Name = "cmdPrevious";
             this.cmdPrevious.Size = new System.Drawing.Size(27, 22);
             this.cmdPrevious.TabIndex = 44;
@@ -297,7 +314,7 @@
             // 
             this.cmdPlayPause.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdPlayPause.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.cmdPlayPause.Location = new System.Drawing.Point(128, 41);
+            this.cmdPlayPause.Location = new System.Drawing.Point(128, 43);
             this.cmdPlayPause.Name = "cmdPlayPause";
             this.cmdPlayPause.Size = new System.Drawing.Size(56, 22);
             this.cmdPlayPause.TabIndex = 42;
@@ -331,7 +348,7 @@
             this.cmdShuffle.Name = "cmdShuffle";
             this.cmdShuffle.Size = new System.Drawing.Size(48, 20);
             this.cmdShuffle.TabIndex = 50;
-            this.cmdShuffle.Text = "&Shuffle";
+            this.cmdShuffle.Text = "Shuffle";
             this.cmdShuffle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdShuffle, "Randomly shuffles the current playlist");
             this.cmdShuffle.Click += new System.EventHandler(this.cmdShuffle_Click);
@@ -357,9 +374,9 @@
             // Art
             // 
             this.Art.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Art.Location = new System.Drawing.Point(10, 10);
+            this.Art.Location = new System.Drawing.Point(7, 10);
             this.Art.Name = "Art";
-            this.Art.Size = new System.Drawing.Size(75, 75);
+            this.Art.Size = new System.Drawing.Size(90, 90);
             this.Art.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.Art.TabIndex = 32;
             this.Art.TabStop = false;
@@ -398,7 +415,7 @@
             this.PlaybackSlider.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PlaybackSlider.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(123)))), ((int)(((byte)(125)))), ((int)(((byte)(123)))));
             this.PlaybackSlider.IndentHeight = 6;
-            this.PlaybackSlider.Location = new System.Drawing.Point(127, 64);
+            this.PlaybackSlider.Location = new System.Drawing.Point(102, 68);
             this.PlaybackSlider.Maximum = 10;
             this.PlaybackSlider.Minimum = 0;
             this.PlaybackSlider.Name = "PlaybackSlider";
@@ -417,19 +434,6 @@
             this.PlaybackSlider.Scroll += new System.EventHandler(this.PlaybackSlider_Scroll);
             this.PlaybackSlider.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PlaybackSlider_MouseDown);
             this.PlaybackSlider.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PlaybackSlider_MouseUp);
-            // 
-            // lblInfo
-            // 
-            this.lblInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblInfo.AutoSize = true;
-            this.lblInfo.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.lblInfo.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lblInfo.Location = new System.Drawing.Point(99, 30);
-            this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(25, 13);
-            this.lblInfo.TabIndex = 66;
-            this.lblInfo.Text = "Info";
-            this.lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // PlayerForm
             // 
@@ -451,6 +455,8 @@
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.PlayerForm_Paint);
             this.FormContainer.ResumeLayout(false);
             this.FormContainer.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Art)).EndInit();
             this.ResumeLayout(false);
 
@@ -459,7 +465,6 @@
         #endregion
 
         private System.Windows.Forms.Label Playback;
-        private System.Windows.Forms.Label PlaylistCount;
         private System.Windows.Forms.PictureBox Art;
         private System.Windows.Forms.Label Title;
         private System.Windows.Forms.Panel FormContainer;
@@ -482,7 +487,9 @@
         private System.Windows.Forms.ListView lstPlaylist;
         private System.Windows.Forms.ColumnHeader colCurrent;
         private System.Windows.Forms.ColumnHeader colTrack;
-        private System.Windows.Forms.Label lblInfo;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel lblInfo;
+        private System.Windows.Forms.ToolStripStatusLabel PlaylistCount;
     }
 }
 

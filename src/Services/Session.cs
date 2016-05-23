@@ -59,5 +59,16 @@ namespace Rejive
             RaisePlaylistChanged();
         }
 
+        public static void AddFileToPlayList(string file)
+        {
+            if (File.Exists(file) && Profile.AllowableFileTypes.Contains(Path.GetExtension(file)))
+            {
+                var track = new Track();
+                track.ParseFromFileName(file);
+                Playlist.Add(track);
+                RaisePlaylistChanged();
+            }
+        }
+
     }
 }
