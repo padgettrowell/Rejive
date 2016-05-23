@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Rejive
 {
-    public static class PInvoke
+    public static class NativeMethods
     {
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;

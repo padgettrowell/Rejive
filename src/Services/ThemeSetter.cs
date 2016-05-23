@@ -36,6 +36,11 @@ namespace Rejive
                         label.BackColor = backColor;
                     }
 
+                    if (label.Name.StartsWith("lblHeader"))
+                    {
+                        label.ForeColor = foreColor;
+                        label.BackColor = foreColor;
+                    }
                 }
                 else if (ctrl is Control)
                 {

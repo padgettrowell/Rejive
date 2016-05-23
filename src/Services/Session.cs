@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -42,7 +43,7 @@ namespace Rejive
             return (IntPtr)((HiWord << 16) | (LoWord & 0xffff));
         }
 
-        public static void AddFilesToPlaylist(string[] files)
+        public static void AddFilesToPlaylist(IEnumerable<string> files)
         {
 
             foreach (string file in files)

@@ -8,6 +8,7 @@ namespace Rejive
     [Serializable]
     public class Track
     {
+
         public string TrackName { get; set; }
         public string TrackPathName { get; set; }
         public Track() { }

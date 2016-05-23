@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using BrightIdeasSoftware;
 using DataFormats = System.Windows.Forms.DataFormats;
 using DragDropEffects = System.Windows.Forms.DragDropEffects;
 using DragEventArgs = System.Windows.Forms.DragEventArgs;
@@ -12,17 +11,25 @@ namespace Rejive
 {
     public partial class PlayerForm : Form
     {
+        private const string PauseText = "Pause";
+        private const string PlayText = "Play";
         private Theme[] _themes;
         private int _trackCurrentPosition = 0;
         private bool _userChangingPosition;
         private IPlayer _player;
         private StickyWindow _stickyWindow;
-        private TypedObjectListView<Track> _trackListView;
         private GlobalKeyboardHook _keyboardHook = new GlobalKeyboardHook();
+        private const int CS_DROPSHADOW = 0x00020000;
 
-        public TypedObjectListView<Track> TrackListView
+        protected override CreateParams CreateParams
         {
-            get { return _trackListView; }
+            get
+            {
+                // add the drop shadow flag for automatically drawing // a drop shadow around the form
+                CreateParams cp = base.CreateParams;
+                cp.ClassStyle |= CS_DROPSHADOW;
+                return cp;
+            }
         }
 
         public PlayerForm()
@@ -51,21 +58,17 @@ namespace Rejive
 
                 Session.Playlist = Session.Profile.Playlist;
                 Session.PlaylistChanged += LoadPlaylist;
+                Session.Playlist.CurrentItemChanged += Playlist_CurrentItemChanged;
 
                 Text = "Rejive";
                 Title.Text = "Rejive";
                 
-                _player = new MediaElementPlayer();
-                //_player = new MCIPlayer();
-
+                _player = new IrrKlangPlayer();
                 _player.Init(this);
+                _player.Volume = (float)VolumeSlider.Value / 100;
                 _player.PlaybackComplete += Player_PlaybackComplete;
                 _player.PlaybackPositionChanged += Player_PlaybackPositionChanged;
-                 
-                lstPlaylist.CellToolTipShowing += Playlist_ToolTipShowing;
-            
-                _trackListView = new TypedObjectListView<Track>(lstPlaylist);
-                TrackListView.GetColumn(0).AspectGetter = delegate(Track t) { return t.TrackName; };
+                _player.PropertyChanged += Player_PropertyChanged;              
 
                 LoadPlaylist();
 
@@ -88,8 +91,8 @@ namespace Rejive
                 new Theme() { ForeColor = Color.Lime, BackColor = Color.DarkSlateGray, HighlightColor = Color.DarkOrange},
                 new Theme() { ForeColor = Color.LightSkyBlue, BackColor = Color.DarkSlateGray, HighlightColor = Color.Yellow},
                 new Theme() { ForeColor = Color.DarkOrange, BackColor = Color.DarkSlateGray, HighlightColor = Color.Lime },
-                new Theme() { ForeColor = Color.DodgerBlue, BackColor = Color.GhostWhite, HighlightColor = Color.DarkOrange },
-                new Theme() { ForeColor = Color.DarkOrange, BackColor = Color.GhostWhite, HighlightColor = Color.DodgerBlue }
+                new Theme() { ForeColor = Color.DodgerBlue, BackColor = Color.White, HighlightColor = Color.DarkOrange },
+                new Theme() { ForeColor = Color.DarkOrange, BackColor = Color.White, HighlightColor = Color.DodgerBlue }
             };
 
             Theme0.BackColor = _themes[0].ForeColor;
@@ -107,50 +110,55 @@ namespace Rejive
 
         private void BindKeys()
         {
-            _keyboardHook.HookedKeys.Add(Session.Profile.PauseKey);
-            _keyboardHook.HookedKeys.Add(Session.Profile.PreviousKey);
-            _keyboardHook.HookedKeys.Add(Session.Profile.NextKey);
-            _keyboardHook.KeyDown += KeyboardHook_KeyDown;
+            _keyboardHook.HookedKeys.Add(Keys.Space);
+            _keyboardHook.HookedKeys.Add(Keys.M);
+            _keyboardHook.HookedKeys.Add(Keys.N);
+            _keyboardHook.HookedKeys.Add(Keys.A);
 
-            ToolTipProvider.SetToolTip(cmdPrevious, string.Format("Previous (Hotkey: {0})", Session.Profile.PreviousKey));
-            ToolTipProvider.SetToolTip(cmdNext, string.Format("Next (Hotkey: {0})", Session.Profile.NextKey));
-            ToolTipProvider.SetToolTip(cmdPause, string.Format("Pause (Hotkey: {0})", Session.Profile.PauseKey));
+            _keyboardHook.KeyUp += KeyboardHook_KeyUp;
+
+            ToolTipProvider.SetToolTip(cmdPrevious, string.Format("Previous (Hotkey: {0})", Keys.N));
+            ToolTipProvider.SetToolTip(cmdNext, string.Format("Next (Hotkey: {0})", Keys.M));
+            ToolTipProvider.SetToolTip(cmdPlayPause, string.Format("Play/Pause (Hotkey: {0})", Keys.Space));
         }
 
-        private void KeyboardHook_KeyDown(object sender, KeyEventArgs e)
+        private void KeyboardHook_KeyUp(object sender, KeyEventArgs e)
         {
             // The Form is the active window
-            if (PInvoke.GetActiveWindow() != Handle)
+            if (NativeMethods.GetActiveWindow() != Handle)
                 return;
 
-            if (e.KeyCode == Session.Profile.PauseKey)
+            if (e.KeyCode == Keys.Space)
             {
-                if (_player.IsPaused)
+                if (_player.State == PlaybackState.Paused)
                 {
                     _player.Play();
                 }
-                else
+                else if (_player.State == PlaybackState.Playing)
                 {
                     _player.Pause();
                 }
 
                 e.Handled = true;
             }
-            else if (e.KeyCode == Session.Profile.PreviousKey)
+            else if (e.KeyCode == Keys.N)
             {
                 DoMovePreviousAndPlay();
                 e.Handled = true;
             }
-            else if (e.KeyCode == Session.Profile.NextKey)
+            else if (e.KeyCode == Keys.M)
             {
                 DoMoveNextAndPlay();
                 e.Handled = true;
             }
-        }
-
-        private void Playlist_ToolTipShowing(object sender, ToolTipShowingEventArgs e)
-        {
-            e.Text = ((Track)e.Item.RowObject).TrackPathName;
+            else if (e.KeyCode == Keys.A)
+            {
+                foreach (ListViewItem item in lstPlaylist.Items)
+                {
+                    item.Selected = true;
+                }
+                e.Handled = true;
+            }
         }
 
         private void FormPlayer_Shown(object sender, EventArgs e)
@@ -163,10 +171,14 @@ namespace Rejive
 
         private void LoadPlaylist()
         {
-            lstPlaylist.SetObjects(Session.Playlist);
-
-            //Index playing or how many items in our playlist
             PlaylistCount.Text = string.Format("{0}/{1}", Session.Playlist.CurrentPosition + 1, Session.Playlist.Count);
+
+            lstPlaylist.Items.Clear();
+
+            foreach (var t in Session.Playlist)
+            {
+                lstPlaylist.Items.Add(new ListViewItem(new[] { string.Empty, t.TrackName }) { Tag = t });
+            }
         }
 
         void Player_PlaybackComplete()
@@ -174,6 +186,32 @@ namespace Rejive
             DoMoveNextAndPlay();
         }
 
+        void Playlist_CurrentItemChanged(Track previous, Track current)
+        {
+
+            int foundCount = 0;
+
+            foreach (ListViewItem item in lstPlaylist.Items)
+            {
+                Track t = item.Tag as Track;
+
+                if (t.Equals(previous))
+                {
+                    item.Text = string.Empty;
+                    foundCount++;
+                }
+
+                if (t.Equals(current))
+                {
+                    item.Text = "*";
+                    foundCount++;
+                    lstPlaylist.EnsureVisible(item.Index);
+                }
+
+                if (foundCount >= 2)
+                    break;
+            }
+        }
         void Player_PlaybackPositionChanged(TimeSpan currentPosition)
         {
             if (!_userChangingPosition)
@@ -187,6 +225,19 @@ namespace Rejive
                 _trackCurrentPosition = currentPosition.Seconds;
                 PlaybackSlider.Maximum = (int)ts.TotalSeconds;
                 PlaybackSlider.Value = (int)currentPosition.TotalSeconds;
+            }
+        }
+
+        private void Player_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "State")
+            {
+                if (_player.State == PlaybackState.Paused || _player.State == PlaybackState.None)
+                    cmdPlayPause.Text = PlayText;
+                else if (_player.State == PlaybackState.Playing)
+                    cmdPlayPause.Text = PauseText;
+
+                lblInfo.Text = string.Format("{0} kbps @ {1} Hz {2}", _player.BytesPerSecond / 1000, _player.SampleRate, _player.Channels == 2 ? " Stereo" : " Mono");
             }
         }
 
@@ -209,11 +260,8 @@ namespace Rejive
             _player.Load(Session.Playlist.CurrentItem.TrackPathName);
             _player.Play();
 
-            //Select the item in the playlist 
-            TrackListView.SelectedObject = Session.Playlist.CurrentItem;
-
-            //Ensure the item is visible in the list 
-            TrackListView.ListView.EnsureVisible(TrackListView.ListView.SelectedIndex);
+            //Uncheck the pause button
+            cmdPlayPause.Text = PauseText;
 
             //Index playing or how many items in our playlist
             PlaylistCount.Text = string.Format("{0}/{1}", Session.Playlist.CurrentPosition + 1, Session.Playlist.Count);
@@ -239,17 +287,15 @@ namespace Rejive
 
         private void DoMoveNextAndPlay()
         {
-            if (_trackListView.SelectedObjects.Count == 0)               //No track is selected, play the first track.
-            {              
+            if (Session.Playlist.CurrentItem == null)               //No track is selected, play the first track.
+            {
                 Session.Playlist.MoveFirst();
                 PlayCurrentItem();
             }
-            else
-            {                                                           // We have current track, we're not moving randomly so move to the next item in the playlist.
-                var newIndex = Session.Playlist.CurrentPosition + 1;
+            else if (Session.Playlist.CurrentPosition < Session.Playlist.Count - 1)
+            {
                 Session.Playlist.MoveNext();
                 PlayCurrentItem();
-              
             }
         }
 
@@ -285,14 +331,21 @@ namespace Rejive
             PlayCurrentItem();
         }
 
-        private void cmdPause_Click(object sender, EventArgs e)
+        private void cmdPlayPause_Click(object sender, EventArgs e)
         {
-            _player.Pause();
-        }
-
-        private void cmdStop_Click(object sender, EventArgs e)
-        {
-            _player.Stop();
+            if (_player.State == PlaybackState.Paused)
+            {
+                _player.Play();
+            }
+            else if (_player.State == PlaybackState.Playing)
+            {
+                _player.Pause();
+            }
+            else if (_player.State == PlaybackState.None)
+            {
+                Session.Playlist.MoveFirst();
+                PlayCurrentItem();
+            }
         }
 
         private void cmdPrevious_Click(object sender, EventArgs e)
@@ -314,9 +367,9 @@ namespace Rejive
 
         private void lstPlaylist_DoubleClick(object sender, EventArgs e)
         {
-            if (TrackListView.SelectedObject != null)
+            if (lstPlaylist.SelectedItems != null && lstPlaylist.SelectedItems.Count == 1)
             {
-                Session.Playlist.MoveTo(TrackListView.SelectedObject);
+                Session.Playlist.MoveTo(lstPlaylist.SelectedItems[0].Tag as Track);
                 PlayCurrentItem();
             }
         }
@@ -342,42 +395,20 @@ namespace Rejive
 
         }
 
-        private void lstPlaylist_KeyDown(object sender, KeyEventArgs e)
+        private void lstPlaylist_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
             {
-                if (TrackListView.SelectedObjects.Count == 1)           //One item selected.  Delete it, select the next item.
+                if (e.KeyCode == Keys.Delete)
                 {
-                    var thisIndex = lstPlaylist.SelectedIndices[0];
-                    Session.Playlist.Remove(TrackListView.SelectedObject);
-                    LoadPlaylist();
+                    foreach (ListViewItem item in lstPlaylist.SelectedItems)
+                    {
+                        Session.Playlist.Remove(item.Tag as Track);
+                    }
 
-                    if ((thisIndex + 1) < lstPlaylist.Items.Count)
-                    {
-                        lstPlaylist.Items[thisIndex].Selected = true;
-                    }
-                    else //we're at the end of the list, attempt to select the last item
-                    {
-                        if (lstPlaylist.Items.Count > 0)
-                            lstPlaylist.Items[lstPlaylist.Items.Count - 1].Selected = true;
-                    }
-                }
-                else if (TrackListView.SelectedObjects.Count > 1)       //Multple items selected, just delete them all.
-                {
-                    foreach (Track track in TrackListView.SelectedObjects)
-                    {
-                        Session.Playlist.Remove(track);
-                    }
                     LoadPlaylist();
-                    lstPlaylist.DeselectAll();
+                    e.Handled = true;
                 }
-
-                e.Handled = true;
-            }
-            else if (e.Control && e.KeyCode == Keys.A && !e.Alt)
-            {
-                e.Handled = true;
-                lstPlaylist.SelectAll();
             }
         }
 
@@ -390,12 +421,12 @@ namespace Rejive
         {
             if (e.Button == MouseButtons.Left)
             {
-                PInvoke.ReleaseCapture();
+                NativeMethods.ReleaseCapture();
 
                 if (sender is PictureBox)
-                    PInvoke.SendMessage(Handle, PInvoke.WM_NCLBUTTONDOWN, (IntPtr)PInvoke.HT_CAPTION, Session.MakeLParam(((PictureBox)(sender)).Location.X + e.Location.X, ((PictureBox)(sender)).Location.Y + e.Location.Y));
+                    NativeMethods.SendMessage(Handle, NativeMethods.WM_NCLBUTTONDOWN, (IntPtr)NativeMethods.HT_CAPTION, Session.MakeLParam(((PictureBox)(sender)).Location.X + e.Location.X, ((PictureBox)(sender)).Location.Y + e.Location.Y));
                 else
-                    PInvoke.SendMessage(Handle, PInvoke.WM_NCLBUTTONDOWN, (IntPtr)PInvoke.HT_CAPTION, Session.MakeLParam(((Label)(sender)).Location.X + e.Location.X, ((Label)(sender)).Location.Y + e.Location.Y));
+                    NativeMethods.SendMessage(Handle, NativeMethods.WM_NCLBUTTONDOWN, (IntPtr)NativeMethods.HT_CAPTION, Session.MakeLParam(((Label)(sender)).Location.X + e.Location.X, ((Label)(sender)).Location.Y + e.Location.Y));
 
             }
         }
@@ -420,20 +451,20 @@ namespace Rejive
      
         private void PlayerForm_Paint(object sender, PaintEventArgs e)
         {
-            var inner = new Rectangle(ClientRectangle.Location, ClientRectangle.Size);
-            inner.Inflate(-1, -1);
+            //var inner = new Rectangle(ClientRectangle.Location, ClientRectangle.Size);
+            //inner.Inflate(-1, -1);
 
-            ControlPaint.DrawBorder(
-                e.Graphics,
-                inner,
-                ForeColor,
-                ButtonBorderStyle.Solid);
+            //ControlPaint.DrawBorder(
+            //    e.Graphics,
+            //    inner,
+            //    ForeColor,
+            //    ButtonBorderStyle.Solid);
 
-            ControlPaint.DrawBorder(
-                e.Graphics,
-                ClientRectangle,
-                BackColor,
-                ButtonBorderStyle.Solid);
+            //ControlPaint.DrawBorder(
+            //    e.Graphics,
+            //    ClientRectangle,
+            //    BackColor,
+            //    ButtonBorderStyle.Solid);
         }
 
         protected override void WndProc(ref Message m)
@@ -482,7 +513,7 @@ namespace Rejive
 
         private void VolumeSlider_Scroll(object sender, EventArgs e)
         {
-            _player.Volume = (double)VolumeSlider.Value / 100;
+            _player.Volume = (float)VolumeSlider.Value / 100;
         }
 
         private void Theme0_Click(object sender, EventArgs e)
@@ -555,5 +586,26 @@ namespace Rejive
                 lbl.ForeColor = _themes[Session.Profile.Theme].ForeColor;
             }
         }
+
+        private void cmdEnqueue_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog()
+            {
+                Description = "Select folder to add to playlist. Files will be added recursively."    ,
+                SelectedPath = string.IsNullOrEmpty(Session.Profile.LastFolderOpened) ? Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) : Session.Profile.LastFolderOpened ,
+                ShowNewFolderButton = false
+            })
+            {
+                DialogResult result = dialog.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    Session.Profile.LastFolderOpened = dialog.SelectedPath;
+                    Session.AddFilesToPlaylist(FileSearcher.GetAllFilesInDirectoryAndSubdirectories(dialog.SelectedPath));
+                }
+            }
+        }
+
+
     }
 }
