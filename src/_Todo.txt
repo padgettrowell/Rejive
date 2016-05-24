@@ -10,18 +10,8 @@ Objectives:
  - User doesn't need a music 'manager' and can figure out how to drag and drop what they want to listen to into Rejive
 
  Todo:
-  - remove navigatable track
-  - remove scan types
-  - move media playback to bass.net or some other single file decoder??
-  - compare resource usage of MCIPlayer and MediaElementPlayer
-  - do I **need** pictures?
-  - Have an 'online' toggle. When on, fetch pictures / ID tag data from online music service, cache this. Make the feature opt in
+  - ID3 Tagging, or have an 'online' toggle. When on, fetch pictures / ID tag data from online music service, cache this. Make the feature opt in?
   - program a visualisation
-  - Add audio bitrate info
-  - do i need:
-	- Random?
-	- Shuffle?
- - make the whole app a drop zone for dragging in files
- - change XML serialisation of .profile to json, or a text file
- - Remove objectlist dependancy?
+  - program wave form as a replacement for track bar for user to navigate track position within song
+  - fix Selected indicator for currently playing track
 
