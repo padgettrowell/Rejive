@@ -14,4 +14,5 @@ Objectives:
   - program a visualisation
   - program wave form as a replacement for track bar for user to navigate track position within song
   - fix Selected indicator for currently playing track
+  - merge dependant dll's into a single .exe
 
