@@ -6,53 +6,38 @@ namespace Rejive
 {
     public static class FileSearcher
     {
-        public static IEnumerable<string> Search(string root, string searchPattern, List<string> allowableFileTypes)
+        public static IEnumerable<string> GetAllFilesInDirectoryAndSubdirectories(string path)
         {
-            Queue<string> dirs = new Queue<string>();
-            dirs.Enqueue(root);
-            while (dirs.Count > 0)
+            Queue<string> queue = new Queue<string>();
+            queue.Enqueue(path);
+            while (queue.Count > 0)
             {
-                string dir = dirs.Dequeue();
-
-                // files
-                string[] paths = null;
+                path = queue.Dequeue();
                 try
                 {
-                    if (string.IsNullOrEmpty(searchPattern))
+                    foreach (string subDir in Directory.GetDirectories(path))
                     {
-                        paths = Directory.GetFiles(dir);    
-                    }
-                    else
-                    {
-                        paths = Directory.GetFiles(dir, searchPattern);
+                        queue.Enqueue(subDir);
                     }
                 }
-                catch { } // swallow
-
-                if (paths != null && paths.Length > 0)
+                catch (Exception ex)
                 {
-                    foreach (string file in paths)
-                    {
-                        if (allowableFileTypes != null && allowableFileTypes.Contains(Path.GetExtension(file)))
-                        {
-                            yield return file;    
-                        }
-                    }
+                    Console.Error.WriteLine(ex);
                 }
-
-                // sub-directories
-                paths = null;
+                string[] files = null;
                 try
                 {
-                    paths = Directory.GetDirectories(dir);
+                    files = Directory.GetFiles(path);
                 }
-                catch { } // swallow
-
-                if (paths != null && paths.Length > 0)
+                catch (Exception ex)
                 {
-                    foreach (string subDir in paths)
+                    Console.Error.WriteLine(ex);
+                }
+                if (files != null)
+                {
+                    for (int i = 0; i < files.Length; i++)
                     {
-                        dirs.Enqueue(subDir);
+                        yield return files[i];
                     }
                 }
             }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 
@@ -13,12 +12,7 @@ namespace Rejive
         /// <summary>
         /// The contructor 
         /// </summary>
-        private TrackBarDrawStyleHelper()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
+        private TrackBarDrawStyleHelper() {}
 
         /// <summary>
         /// 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -15,10 +16,7 @@ namespace Rejive
 
         public static void RaisePlaylistChanged()
         {
-            if (PlaylistChanged != null)
-            {
-                PlaylistChanged();
-            }
+            PlaylistChanged?.Invoke();
         }
 
         public static bool IsOnScreen(Form form)
@@ -42,7 +40,7 @@ namespace Rejive
             return (IntPtr)((HiWord << 16) | (LoWord & 0xffff));
         }
 
-        public static void AddFilesToPlaylist(string[] files)
+        public static void AddFilesToPlaylist(IEnumerable<string> files)
         {
 
             foreach (string file in files)
@@ -56,6 +54,17 @@ namespace Rejive
             }
 
             RaisePlaylistChanged();
+        }
+
+        public static void AddFileToPlayList(string file)
+        {
+            if (File.Exists(file) && Profile.AllowableFileTypes.Contains(Path.GetExtension(file)))
+            {
+                var track = new Track();
+                track.ParseFromFileName(file);
+                Playlist.Add(track);
+                RaisePlaylistChanged();
+            }
         }
 
     }

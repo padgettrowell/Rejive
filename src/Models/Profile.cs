@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace Rejive
@@ -12,17 +10,13 @@ namespace Rejive
     public class Profile
     {
         public NavigatableCollection<Track> Playlist { get; set; }
+        public string LastFolderOpened { get; set; }
         private List<string> _allowableFileTypes;
 
         public Profile()
         {
             Playlist = new NavigatableCollection<Track>();
-            _allowableFileTypes = new List<string>(new[] { ".flac", ".mp3", ".wav", ".wma" });
-   
-            //Shortcut keys
-            PauseKey = Keys.Space;
-            PreviousKey = Keys.Z;
-            NextKey = Keys.X;
+            _allowableFileTypes = new List<string>(new[] { ".flac", ".mp3", ".wav", ".wma", ".ogg" });
         }
 
         public int Theme { get; set; }
@@ -35,10 +29,6 @@ namespace Rejive
 
         public bool AlwaysOnTop { get; set; }
         public Point PlayerLocation { get; set; }
-        public Size PlayerSize { get; set; }
-        public Keys PauseKey { get; set; }
-        public Keys PreviousKey { get; set; }
-        public Keys NextKey { get; set; }
-        
+        public Size PlayerSize { get; set; }        
     }
 }

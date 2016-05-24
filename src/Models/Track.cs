@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 
@@ -25,6 +24,12 @@ namespace Rejive
             try
             {
                 string imagePath = Path.Combine(Path.GetDirectoryName(TrackPathName), "folder.jpg");
+                if (File.Exists(imagePath))
+                {
+                    return Image.FromFile(imagePath);
+                }
+
+                imagePath = Path.Combine(Path.GetDirectoryName(TrackPathName), "cover.jpg");
                 if (File.Exists(imagePath))
                 {
                     return Image.FromFile(imagePath);
