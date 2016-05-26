@@ -94,6 +94,7 @@
     <Reference Include="irrKlang.NET4, Version=1.0.5235.17346, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\irrKlang.NET4.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -148,6 +149,7 @@
     <Compile Include="Models\Profile.cs" />
     <Compile Include="Services\PlaylistShuffler.cs" />
     <Compile Include="Services\ProfileService.cs" />
+    <Compile Include="Services\ResourceExtractor.cs" />
     <Compile Include="Services\Session.cs" />
     <Compile Include="Services\ThemeSetter.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -156,15 +158,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ikpFlac.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ikpMP3.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="irrKlang.NET4.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="ikpFlac.dll" />
+    <EmbeddedResource Include="ikpMP3.dll" />
+    <EmbeddedResource Include="irrKlang.NET4.dll" />
     <Content Include="Rejive.ico" />
     <Content Include="_Todo.txt" />
     <None Include="app.config" />
