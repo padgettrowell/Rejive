@@ -209,6 +209,8 @@
             this.cmdEnqueue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ToolTipProvider.SetToolTip(this.cmdEnqueue, "Randomly shuffles the current playlist");
             this.cmdEnqueue.Click += new System.EventHandler(this.cmdEnqueue_Click);
+            this.cmdEnqueue.MouseEnter += new System.EventHandler(this.cmdLabel_MouseEnter);
+            this.cmdEnqueue.MouseLeave += new System.EventHandler(this.cmdLabel_MouseLeave);
             // 
             // Theme4
             // 
