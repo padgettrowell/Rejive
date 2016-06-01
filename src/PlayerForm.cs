@@ -187,27 +187,18 @@ namespace Rejive
         void Playlist_CurrentItemChanged(Track previous, Track current)
         {
 
-            int foundCount = 0;
-
             foreach (ListViewItem item in lstPlaylist.Items)
             {
                 Track t = item.Tag as Track;
-
-                if (t.Equals(previous))
-                {
-                    item.Text = string.Empty;
-                    foundCount++;
-                }
-
                 if (t.Equals(current))
                 {
-                    item.Text = "*";
-                    foundCount++;
+                    item.Text = ">";
                     lstPlaylist.EnsureVisible(item.Index);
                 }
-
-                if (foundCount >= 2)
-                    break;
+                else
+                {
+                    item.Text = string.Empty;
+                }
             }
         }
         void Player_PlaybackPositionChanged(TimeSpan currentPosition)
@@ -374,8 +365,39 @@ namespace Rejive
 
         private void cmdShuffle_Click(object sender, EventArgs e)
         {
+            Session.PlaylistChanged -= LoadPlaylist;
+            Session.Playlist.CurrentItemChanged -= Playlist_CurrentItemChanged;
+
+            var current = Session.Playlist.CurrentItem;
             Session.Playlist = PlaylistShuffler.Shuffle(Session.Playlist);
             LoadPlaylist();
+            EnsureSelected(current);
+
+            //Session.Playlist = Session.Profile.Playlist;
+            Session.PlaylistChanged += LoadPlaylist;
+            Session.Playlist.CurrentItemChanged += Playlist_CurrentItemChanged;
+
+        }
+
+        private void EnsureSelected(Track current)
+        {
+            if (current == null)
+                return;
+
+            foreach (ListViewItem item in lstPlaylist.Items)
+            {
+                Track t = item.Tag as Track;
+
+                if (t.Equals(current))
+                {
+                    item.Text = ">";
+                    lstPlaylist.EnsureVisible(item.Index);
+                }
+                else
+                {
+                    item.Text = string.Empty;
+                }
+            }
         }
 
         private void cmdAlwayOnTop_Click(object sender, EventArgs e)
