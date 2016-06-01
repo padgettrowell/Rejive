@@ -276,7 +276,17 @@ namespace Rejive
 
         private void DoMoveNextAndPlay()
         {
-            if (Session.Playlist.CurrentItem == null)               //No track is selected, play the first track.
+
+            if (Session.Profile.Random)
+            {
+                var nextTrack = PlaylistShuffler.PickRandomTrack(Session.Playlist);
+                if (nextTrack != null)
+                {
+                    Session.Playlist.MoveTo(nextTrack);
+                    PlayCurrentItem();
+                }
+            }
+            else if (Session.Playlist.CurrentItem == null)               //No track is selected, play the first track.
             {
                 Session.Playlist.MoveFirst();
                 PlayCurrentItem();
@@ -581,6 +591,13 @@ namespace Rejive
                     lbl.ForeColor = _themes[Session.Profile.Theme].HighlightColor;
                 }
             }
+            else if (lbl.Name.StartsWith("togRandom"))
+            {
+                if (!Session.Profile.Random)
+                {
+                    lbl.ForeColor = _themes[Session.Profile.Theme].HighlightColor;
+                }
+            }
             else
             {
                 lbl.ForeColor = _themes[Session.Profile.Theme].HighlightColor;
@@ -595,6 +612,13 @@ namespace Rejive
             if (lbl.Name.StartsWith("cmdAlwayOnTop"))
             {
                 if (!TopMost)
+                {
+                    lbl.ForeColor = _themes[Session.Profile.Theme].ForeColor;
+                }
+            }
+            else if (lbl.Name.StartsWith("togRandom"))
+            {
+                if (!Session.Profile.Random)
                 {
                     lbl.ForeColor = _themes[Session.Profile.Theme].ForeColor;
                 }
@@ -621,6 +645,19 @@ namespace Rejive
                     Session.Profile.LastFolderOpened = dialog.SelectedPath;
                     Session.AddFilesToPlaylist(FileSearcher.GetAllFilesInDirectoryAndSubdirectories(dialog.SelectedPath));
                 }
+            }
+        }
+
+        private void togRandom_Click(object sender, EventArgs e)
+        {
+            Session.Profile.Random = !Session.Profile.Random;
+            if (Session.Profile.Random)
+            {
+                togRandom.ForeColor = _themes[Session.Profile.Theme].HighlightColor;
+            }
+            else
+            {
+                togRandom.ForeColor = _themes[Session.Profile.Theme].ForeColor;
             }
         }
     }
