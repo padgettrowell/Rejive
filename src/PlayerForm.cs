@@ -57,6 +57,15 @@ namespace Rejive
                     Size = Session.Profile.PlayerSize;
                 }
 
+                if (Session.Profile.Random)
+                {
+                    togRandom.ForeColor = _themes[Session.Profile.Theme].HighlightColor;
+                }
+                else
+                {
+                    togRandom.ForeColor = _themes[Session.Profile.Theme].ForeColor;
+                }
+
                 Session.Playlist = Session.Profile.Playlist;
                 Session.PlaylistChanged += LoadPlaylist;
                 Session.Playlist.CurrentItemChanged += Playlist_CurrentItemChanged;
