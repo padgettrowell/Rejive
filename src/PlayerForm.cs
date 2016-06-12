@@ -57,6 +57,15 @@ namespace Rejive
                     Size = Session.Profile.PlayerSize;
                 }
 
+                if (Session.Profile.Random)
+                {
+                    togRandom.ForeColor = _themes[Session.Profile.Theme].HighlightColor;
+                }
+                else
+                {
+                    togRandom.ForeColor = _themes[Session.Profile.Theme].ForeColor;
+                }
+
                 Session.Playlist = Session.Profile.Playlist;
                 Session.PlaylistChanged += LoadPlaylist;
                 Session.Playlist.CurrentItemChanged += Playlist_CurrentItemChanged;
@@ -187,27 +196,18 @@ namespace Rejive
         void Playlist_CurrentItemChanged(Track previous, Track current)
         {
 
-            int foundCount = 0;
-
             foreach (ListViewItem item in lstPlaylist.Items)
             {
                 Track t = item.Tag as Track;
-
-                if (t.Equals(previous))
-                {
-                    item.Text = string.Empty;
-                    foundCount++;
-                }
-
                 if (t.Equals(current))
                 {
-                    item.Text = "*";
-                    foundCount++;
+                    item.Text = ">";
                     lstPlaylist.EnsureVisible(item.Index);
                 }
-
-                if (foundCount >= 2)
-                    break;
+                else
+                {
+                    item.Text = string.Empty;
+                }
             }
         }
         void Player_PlaybackPositionChanged(TimeSpan currentPosition)
@@ -285,7 +285,17 @@ namespace Rejive
 
         private void DoMoveNextAndPlay()
         {
-            if (Session.Playlist.CurrentItem == null)               //No track is selected, play the first track.
+
+            if (Session.Profile.Random)
+            {
+                var nextTrack = PlaylistShuffler.PickRandomTrack(Session.Playlist);
+                if (nextTrack != null)
+                {
+                    Session.Playlist.MoveTo(nextTrack);
+                    PlayCurrentItem();
+                }
+            }
+            else if (Session.Playlist.CurrentItem == null)               //No track is selected, play the first track.
             {
                 Session.Playlist.MoveFirst();
                 PlayCurrentItem();
@@ -374,8 +384,39 @@ namespace Rejive
 
         private void cmdShuffle_Click(object sender, EventArgs e)
         {
+            Session.PlaylistChanged -= LoadPlaylist;
+            Session.Playlist.CurrentItemChanged -= Playlist_CurrentItemChanged;
+
+            var current = Session.Playlist.CurrentItem;
             Session.Playlist = PlaylistShuffler.Shuffle(Session.Playlist);
             LoadPlaylist();
+            EnsureSelected(current);
+
+            //Session.Playlist = Session.Profile.Playlist;
+            Session.PlaylistChanged += LoadPlaylist;
+            Session.Playlist.CurrentItemChanged += Playlist_CurrentItemChanged;
+
+        }
+
+        private void EnsureSelected(Track current)
+        {
+            if (current == null)
+                return;
+
+            foreach (ListViewItem item in lstPlaylist.Items)
+            {
+                Track t = item.Tag as Track;
+
+                if (t.Equals(current))
+                {
+                    item.Text = ">";
+                    lstPlaylist.EnsureVisible(item.Index);
+                }
+                else
+                {
+                    item.Text = string.Empty;
+                }
+            }
         }
 
         private void cmdAlwayOnTop_Click(object sender, EventArgs e)
@@ -559,6 +600,13 @@ namespace Rejive
                     lbl.ForeColor = _themes[Session.Profile.Theme].HighlightColor;
                 }
             }
+            else if (lbl.Name.StartsWith("togRandom"))
+            {
+                if (!Session.Profile.Random)
+                {
+                    lbl.ForeColor = _themes[Session.Profile.Theme].HighlightColor;
+                }
+            }
             else
             {
                 lbl.ForeColor = _themes[Session.Profile.Theme].HighlightColor;
@@ -573,6 +621,13 @@ namespace Rejive
             if (lbl.Name.StartsWith("cmdAlwayOnTop"))
             {
                 if (!TopMost)
+                {
+                    lbl.ForeColor = _themes[Session.Profile.Theme].ForeColor;
+                }
+            }
+            else if (lbl.Name.StartsWith("togRandom"))
+            {
+                if (!Session.Profile.Random)
                 {
                     lbl.ForeColor = _themes[Session.Profile.Theme].ForeColor;
                 }
@@ -599,6 +654,19 @@ namespace Rejive
                     Session.Profile.LastFolderOpened = dialog.SelectedPath;
                     Session.AddFilesToPlaylist(FileSearcher.GetAllFilesInDirectoryAndSubdirectories(dialog.SelectedPath));
                 }
+            }
+        }
+
+        private void togRandom_Click(object sender, EventArgs e)
+        {
+            Session.Profile.Random = !Session.Profile.Random;
+            if (Session.Profile.Random)
+            {
+                togRandom.ForeColor = _themes[Session.Profile.Theme].HighlightColor;
+            }
+            else
+            {
+                togRandom.ForeColor = _themes[Session.Profile.Theme].ForeColor;
             }
         }
     }

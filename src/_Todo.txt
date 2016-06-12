@@ -13,6 +13,3 @@ Objectives:
   - ID3 Tagging, or have an 'online' toggle. When on, fetch pictures / ID tag data from online music service, cache this. Make the feature opt in?
   - program a visualisation
   - program wave form as a replacement for track bar for user to navigate track position within song
-  - fix Selected indicator for currently playing track
-  - merge dependant dll's into a single .exe
-

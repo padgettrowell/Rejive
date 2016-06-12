@@ -28,6 +28,7 @@ namespace Rejive
         }
 
         public bool AlwaysOnTop { get; set; }
+        public bool Random { get; set; }
         public Point PlayerLocation { get; set; }
         public Size PlayerSize { get; set; }        
     }
