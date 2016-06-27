@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Threading;
-using IrrKlang;
+using NAudio;
+using NAudio.Wave;
 
 namespace Rejive
 {
-    public class IrrKlangPlayer : IPlayer, INotifyPropertyChanged, ISoundStopEventReceiver
+    public class NAudioPlayer : IPlayer, INotifyPropertyChanged
     {
         private DispatcherTimer _timer;
         private TimeSpan _trackDuration;
@@ -14,8 +15,8 @@ namespace Rejive
         public event PropertyChangedEventHandler PropertyChanged;
         private float _volume;
 
-        private ISoundEngine _engine;
-        private ISound _currentPlayback;
+        private IWavePlayer _waveOutDevice;
+        private AudioFileReader _currentPlayback;
 
         // IrrKlang ISoundStopEventReceiver occurs on a seperate thread, we need to marshal it back to the UI thread
         private ISynchronizeInvoke _synchronizeInvoke;
@@ -28,34 +29,47 @@ namespace Rejive
         {
             _synchronizeInvoke = container;
 
+            _waveOutDevice = new WaveOut();
+
             //Init out timer
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += Timer_Tick;
         }
 
-        public void OnSoundStopped(ISound sound, StopEventCause reason, object userData)
-        {
-            if (PlaybackComplete != null && reason.HasFlag(StopEventCause.SoundFinishedPlaying))
-            {
-                if (_synchronizeInvoke.InvokeRequired)
-                    _synchronizeInvoke.BeginInvoke(new Action(() => PlaybackComplete()), null);
-                else
-                    PlaybackComplete();
-            }
-        }
+        //public void OnSoundStopped(ISound sound, StopEventCause reason, object userData)
+        //{
+        //    if (PlaybackComplete != null && reason.HasFlag(StopEventCause.SoundFinishedPlaying))
+        //    {
+        //        if (_synchronizeInvoke.InvokeRequired)
+        //            _synchronizeInvoke.BeginInvoke(new Action(() => PlaybackComplete()), null);
+        //        else
+        //            PlaybackComplete();
+        //    }
+        //}
 
         public PlaybackState State
         {
             get
             {
-                if (_currentPlayback == null)
-                    return PlaybackState.None;
+                if (_waveOutDevice != null && _currentPlayback != null)
+                {
 
-                if (_currentPlayback.Paused)
-                    return PlaybackState.Paused;
+                    if (_waveOutDevice.PlaybackState == NAudio.Wave.PlaybackState.Stopped)
+                    {
+                        return PlaybackState.None;
+                    }
+                    else if (_waveOutDevice.PlaybackState == NAudio.Wave.PlaybackState.Playing)
+                    {
+                        return PlaybackState.Playing;
+                    }
+                    else if (_waveOutDevice.PlaybackState == NAudio.Wave.PlaybackState.Paused)
+                    {
+                        return PlaybackState.Paused;
+                    }
+                }
 
-                return PlaybackState.Playing;
+                return PlaybackState.None;
             }
         }
 
@@ -83,44 +97,41 @@ namespace Rejive
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            if (_currentPlayback != null)
+            if (_waveOutDevice != null && _currentPlayback != null)
             {
-                var postition = TimeSpan.FromMilliseconds(_currentPlayback.PlayPosition);
+                var postition = TimeSpan.FromMilliseconds(_currentPlayback.Position);
                 OnPlaybackPositionChanged(postition);
             }
         }
 
         private void OnPlaybackPositionChanged(TimeSpan currentPosition)
         {
-            if (PlaybackPositionChanged != null)
-            {
-                PlaybackPositionChanged(currentPosition);
-            }
+            PlaybackPositionChanged?.Invoke(currentPosition);
         }
 
         public void Load(string file)
         {
             Stop();
 
-            if (_engine == null)
-                _engine = new ISoundEngine();
-
-            _currentPlayback = _engine.Play2D(file, false, false);
+            _currentPlayback = new AudioFileReader(file);
 
             if (_currentPlayback != null)
             {
                 _currentPlayback.Volume = Volume;
 
-                _currentPlayback.setSoundStopEventReceiver(this);
+                _waveOutDevice.Init(_currentPlayback);
+                _waveOutDevice.Play();
 
-               TrackDuration = TimeSpan.FromMilliseconds(_currentPlayback.PlayLength);
+                //_currentPlayback.setSoundStopEventReceiver(this);
+
+               TrackDuration = _currentPlayback.TotalTime;
 
                 OnPlaybackPositionChanged(TimeSpan.FromSeconds(0));
 
-                var info = _engine.GetSoundSource(file).AudioFormat;
-                Channels = info.ChannelCount;
-                BytesPerSecond = info.BytesPerSecond;
-                SampleRate = info.SampleRate;
+                //var info = _engine.GetSoundSource(file).AudioFormat;
+                //Channels = info.ChannelCount;
+                //BytesPerSecond = info.BytesPerSecond;
+                //SampleRate = info.SampleRate;
 
                 NotifyPlayBackStateChanged();
             }
@@ -133,8 +144,10 @@ namespace Rejive
 
         public void Play()
         {
-            if (_currentPlayback != null)
-                _currentPlayback.Paused = false;
+            if (_waveOutDevice?.PlaybackState == NAudio.Wave.PlaybackState.Paused)
+            {
+                _waveOutDevice.Play();
+            }
 
             _timer.Start();
             NotifyPlayBackStateChanged();
@@ -142,8 +155,10 @@ namespace Rejive
 
         public void Pause()
         {
-            if (_currentPlayback != null)
-                _currentPlayback.Paused = !_currentPlayback.Paused;
+            if (_waveOutDevice?.PlaybackState == NAudio.Wave.PlaybackState.Playing)
+            {
+                _waveOutDevice.Pause();
+            }
 
             NotifyPlayBackStateChanged();
         }
@@ -151,9 +166,10 @@ namespace Rejive
         public void Stop()
         {
             _timer.Stop();
+            _waveOutDevice?.Stop();
+
             if (_currentPlayback != null)
             {
-                _currentPlayback.Stop();
                 _currentPlayback.Dispose();
                 _currentPlayback = null;
             }
@@ -180,8 +196,14 @@ namespace Rejive
 
         public void SkipTo(TimeSpan newPosition)
         {
-            if (_currentPlayback != null)
-                _currentPlayback.PlayPosition = (uint)newPosition.TotalMilliseconds;
+            //if (_currentPlayback != null)
+            //    _currentPlayback.PlayPosition = (uint)newPosition.TotalMilliseconds;
+
+            if (_waveOutDevice != null)
+            {
+                _currentPlayback.CurrentTime = newPosition;
+            }
+
         }
 
         public void OnPropertyChanged(string propertyName)
@@ -203,18 +225,12 @@ namespace Rejive
         {
             if (disposing)
             {
-                // free managed resources
-                if (_currentPlayback != null)
-                {
-                    _currentPlayback.Stop();
-                    _currentPlayback.Dispose();
-                    _currentPlayback = null;
-                }
+                Stop();
 
-                if (_engine != null)
+                if (_waveOutDevice != null)
                 {
-                    _engine.Dispose();
-                    _engine = null;
+                    _waveOutDevice.Dispose();
+                    _waveOutDevice = null;
                 }
             }
         }

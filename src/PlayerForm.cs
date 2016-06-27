@@ -73,7 +73,7 @@ namespace Rejive
                 Text = "Rejive";
                 Title.Text = "Rejive";
                 
-                _player = new IrrKlangPlayer();
+                _player = new NAudioPlayer();
                 _player.Init(this);
                 _player.Volume = (float)VolumeSlider.Value / 100;
                 _player.PlaybackComplete += Player_PlaybackComplete;

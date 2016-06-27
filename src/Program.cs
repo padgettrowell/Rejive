@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
-using Rejive.Services;
 
 namespace Rejive
 {
@@ -10,10 +9,7 @@ namespace Rejive
         [STAThread]
         static void Main()
         {
-            ResourceExtractor.ExtractResourceToFile("Rejive.irrKlang.NET4.dll", "irrKlang.NET4.dll");
-            ResourceExtractor.ExtractResourceToFile("Rejive.ikpMP3.dll", "ikpMP3.dll");
-            ResourceExtractor.ExtractResourceToFile("Rejive.ikpFlac.dll", "ikpFlac.dll");
-
+           
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.ThreadException += Application_ThreadException;
